@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
+require("dotenv").config()
 //Mongodb
 let Users = require("../models/Users")
 let Posts = require("../models/Posts")
-require("dotenv").config()
+let Comments = require("../models/Comments")
+
+
 //Authentication
 let jwt = require("jsonwebtoken")
 let bcrypt = require("bcryptjs")
@@ -65,7 +67,7 @@ router.post("/api/user/login", (req, res) => {
                 if(err) throw err;
                 if(isMatch) {
                     let token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, { expiresIn: 360 });
-                    res.json({ success: true, token: token, status: "Login successful" })
+                    res.json({ success: true, token: token, status: "Login successful." })
                 } else {
                     return res.status(403).json({status: "Invalid credentials"})
                 }
@@ -77,6 +79,86 @@ router.post("/api/user/login", (req, res) => {
 })
 //For auth testing purposes
 router.get("/api/secret", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const token = req.headers.authorization
+    const tokenContent = token.split(".")
+    const decode = atob(tokenContent[1])
+    const json = JSON.parse(decode)
+    console.log(json.id)
     return res.json({status:"Success"})
 })
+
+//Upload post
+router.post("/api/upload/post", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const token = req.headers.authorization
+    const tokenContent = token.split(".")
+    const decode = atob(tokenContent[1])
+    const json = JSON.parse(decode)
+    console.log(json)
+    new Posts({
+        owner: json.id,
+        title: req.body.title,
+        content: req.body.content,
+        votes: 0
+    }).save((err) => {
+        if(err) throw err;
+        return res.status(201).json( {status: "New post created."} )
+        })
+})
+
+//Upload comment
+router.post("/api/upload/comment", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const token = req.headers.authorization
+    const tokenContent = token.split(".")
+    const decode = atob(tokenContent[1])
+    const json = JSON.parse(decode)
+    console.log(json)
+    new Comments({
+        post: req.body.postid,
+        author: json.id,
+        content: req.body.content 
+    }).save((err) => {
+        if(err) return res.status(404).json({status: "Post body didn't have required data."});
+        return res.status(201).json( {status: "New comment created."} )
+        })
+})
+
+
+//get all posts
+router.get("/api/list/posts", (req, res) => {
+    Posts.find({}, function(err, posts) {
+        if(err) throw err;
+        if(posts) {
+            console.log(posts)
+            return res.json(posts).status(200)
+        } else {
+            return res.send({status: "not ok"})
+        }
+    }).populate("owner", "username")
+
+})
+
+//get one post
+router.post("/api/list/post", (req, res) => {
+    Posts.findById(req.body.id, function (err, post) {
+        if(err) throw err;
+        if(post) {
+            return res.json(post).status(200)
+        } else {
+            return res.status(404)
+        }
+    }).populate("owner")
+})
+
+router.post("/api/list/comments", (req, res) => {
+    Comments.find({ post: req.body.id }, function (err, comments) {
+        if(err) throw err;
+        if(comments) {
+            console.log(comments)
+            return res.json(comments).status(200)
+        } else {
+            return res.status(404)
+        }
+    }).populate("author")
+})
+
 module.exports = router;
