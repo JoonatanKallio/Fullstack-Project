@@ -1,6 +1,6 @@
+import { Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 function RegisterForm() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -33,22 +33,13 @@ function RegisterForm() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Email
-                    <input type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)}/>
-                </label>
+                <TextField  id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
                 <br/>
-                <label>
-                    Username
-                    <input type="text" name="username" id="username" onChange={(e) => setUsername(e.target.value)}/>
-                </label>
+                <TextField  id="outlined-basic" label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
                 <br/>
-                <label>
-                    Password
-                    <input type="text" name="password" id="password" onChange={(e) => setPassword(e.target.value)}/>
-                </label>
+                <TextField  id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 <br/>
-                <input type="submit" name="submit" id="submit" />
+                <Button variant="contained" type="submit">Register</Button>
             </form>
         </div>
     )

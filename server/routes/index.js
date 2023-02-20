@@ -66,7 +66,7 @@ router.post("/api/user/login", (req, res) => {
             bcrypt.compare(req.body.password, user.password, function(err, isMatch){
                 if(err) throw err;
                 if(isMatch) {
-                    let token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, { expiresIn: 360 });
+                    let token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.SECRET, { expiresIn: 360 });
                     res.json({ success: true, token: token, status: "Login successful." })
                 } else {
                     return res.status(403).json({status: "Invalid credentials"})
@@ -138,8 +138,8 @@ router.get("/api/list/posts", (req, res) => {
 })
 
 //get one post
-router.post("/api/list/post", (req, res) => {
-    Posts.findById(req.body.id, function (err, post) {
+router.get("/api/list/post/:id", (req, res) => {
+    Posts.findById(req.params.id, function (err, post) {
         if(err) throw err;
         if(post) {
             return res.json(post).status(200)
@@ -149,8 +149,8 @@ router.post("/api/list/post", (req, res) => {
     }).populate("owner")
 })
 
-router.post("/api/list/comments", (req, res) => {
-    Comments.find({ post: req.body.id }, function (err, comments) {
+router.get("/api/list/comments/:id", (req, res) => {
+    Comments.find({ post: req.params.id }, function (err, comments) {
         if(err) throw err;
         if(comments) {
             console.log(comments)

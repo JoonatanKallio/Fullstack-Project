@@ -11,5 +11,8 @@
     "build": "cd client && npm run build"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@mui/icons-material": "^5.11.9"
+  }
 }

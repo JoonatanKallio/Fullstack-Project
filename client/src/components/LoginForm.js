@@ -1,6 +1,6 @@
+import { Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,22 +27,16 @@ function LoginForm() {
                 navigate("/");
             }
         })
-    }
+    } // #1E8759
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Email
-                    <input type="text" name="email" id="email"  onChange={(e) => setEmail(e.target.value)}></input>
-                </label>
+                <TextField  id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
                 <br/>
-                <label>
-                    Password
-                    <input type="text" name="password" id="password"onChange={(e) => setPassword(e.target.value)}></input>
-                </label>
+                <TextField  id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 <br/>
-                <input type="submit" name="submit" id="submit"></input>
+                <Button variant="contained" type="submit">Login</Button>
             </form>
         </div>
     )
