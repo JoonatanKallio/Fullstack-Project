@@ -29,16 +29,17 @@ function RegisterForm() {
         })
     }
 
-
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <TextField  id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                
+                <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                
+                <TextField sx={{margin: 2}} id="outlined-basic" label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
+                
+                <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 <br/>
-                <TextField  id="outlined-basic" label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
-                <br/>
-                <TextField  id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
-                <br/>
+                
                 <Button variant="contained" type="submit">Register</Button>
             </form>
         </div>

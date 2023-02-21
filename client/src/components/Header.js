@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Grid, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -7,7 +7,7 @@ function Sitename ({navigate}) {
         navigate("/")
     }
     return (
-        <Typography onClick={logoclick} sx={{cursor: "grab"}} variant="h5" noWrap component="div">
+        <Typography sx={{  fontSize:{ xs: "24px", sm: "32px"}, cursor: "grab"}}onClick={logoclick} variant="h5" noWrap component="div">
             Stack Underflow
         </Typography>
     )
@@ -24,8 +24,6 @@ function Header() {
         navigate("/register")
     }
 
-    
-
     const logoutClick = () => {
         localStorage.removeItem("token")
         navigate("/")
@@ -41,33 +39,33 @@ function Header() {
 
     if(user){
         return (
-            <Box sx={{ flexGrow: 1 }}>
+            <Grid>
                 <AppBar position="static">
-                    <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}variant="dense">
+                    <Toolbar sx={{ display: "flex", justifyContent: "space-between", height:  "50.5px"}}variant="dense">
 
                         <Sitename navigate={navigate}/>
 
                         <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <p style={{fontWeight: 600, margin: 5}}>
+                            <Typography sx={{ display: { xs: "none", sm: "inline"}, fontWeight: 600, marginRight: 2}}>
                                 Logged in as {user.username}
-                            </p>
+                            </Typography>
                             <Button style={{fontWeight: 600, margin: 5}} onClick={logoutClick} variant="outlined" color="inherit">Logout</Button> 
                         </Box>
                     </Toolbar>
                 </AppBar>
-            </Box>
+            </Grid>
         )
     } else {
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
-                    <Toolbar  sx={{display: "flex", justifyContent: "space-between" }}variant="dense">
+                    <Toolbar  sx={{display: "flex", justifyContent: "space-between", height:  "50.5px" }}variant="dense">
 
                         <Sitename navigate={navigate}/>
 
                         <div>
-                            <Button style={{fontWeight: 600, margin: 5}} onClick={loginClick} variant="outlined" color="inherit">Login</Button>
-                            <Button style={{fontWeight: 600, margin: 5}} onClick={registerClick} variant="outlined" color="inherit">Register</Button>
+                            <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={loginClick} variant="outlined" color="inherit">Login</Button>
+                            <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={registerClick} variant="outlined" color="inherit">Register</Button>
                         </div>
                     </Toolbar>
                 </AppBar>

@@ -1,5 +1,5 @@
-import { Button, TextField } from '@mui/material';
 import RegisterForm from "./RegisterForm";
+
 function Register() {
     return (
         <div>

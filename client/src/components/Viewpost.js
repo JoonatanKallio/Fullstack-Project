@@ -25,7 +25,6 @@ function SendComment ({newComment, setNewComment, postId, navigate}) {
 
     return (
         <div>
-            
             <TextField id="outlined-basic" label="Comment" variant="outlined" onChange={(e) => setNewComment(e.target.value)}></TextField>
             <Button onClick={handleClick}>Send</Button>
             

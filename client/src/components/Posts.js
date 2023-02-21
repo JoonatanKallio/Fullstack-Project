@@ -39,7 +39,7 @@ function Loggedin({data, navigate}) {
         <div style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
             <h1>Create a post</h1>
             <TextField id="outlined-basic" label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
-            <TextField id="outlined-basic" label="Post" variant="outlined" onChange={(e) => setNewPost(e.target.value)}></TextField>
+            <TextField multiline id="outlined-basic" label="Post" variant="outlined" onChange={(e) => setNewPost(e.target.value)}></TextField>
             <Button onClick={createPost} style={{marginTop: 20}} variant="contained" color="primary">Create a post</Button>
             <h1>Current posts</h1>
             <ListPost data={data} navigate={navigate}/>

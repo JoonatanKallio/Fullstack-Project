@@ -11,7 +11,8 @@ let Comments = require("../models/Comments")
 let jwt = require("jsonwebtoken")
 let bcrypt = require("bcryptjs")
 let passport = require("passport")
-let { body, validationResult } = require("express-validator")
+let { body, validationResult } = require("express-validator");
+const { Timestamp } = require('mongodb');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -99,10 +100,13 @@ router.post("/api/upload/post", passport.authenticate("jwt", { session: false })
         title: req.body.title,
         content: req.body.content,
         votes: 0
-    }).save((err) => {
+    }).save((err, post) => {
         if(err) throw err;
+        console.log(post)
         return res.status(201).json( {status: "New post created."} )
+        
         })
+
 })
 
 //Upload comment
