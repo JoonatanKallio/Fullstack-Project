@@ -21,8 +21,8 @@ router.get('/', function(req, res, next) {
 
 router.post("/api/user/register",
 body("email").isEmail().normalizeEmail(),
-body("username").isLength({min: 5}),
-body("password").isLength({min: 8}),
+body("username").isLength({min: 3}),
+body("password").isLength({ min: 8 }).not().isUppercase().not().isLowercase().not().isNumeric().not().isAlphanumeric().not(),
 (req, res) => {
 //Validation error handling
     const errors = validationResult(req);
@@ -33,11 +33,11 @@ body("password").isLength({min: 8}),
     Users.findOne({email: req.body.email}, (err, user) => {
         if(err) throw err;
         if(user) { //If email is in use
-            return res.status(403).json({ status: "Email is already in use." })
+            return res.status(400).json({ status: "Email is already in use." })
         } else {
             Users.findOne({username: req.body.username}, (err, user) => {
                 if(user) { //If username is in use
-                    return res.status(403).json({ status: "Username is already in use." })
+                    return res.status(400).json({ status: "Username is already in use." })
                 } else { //If no matching email or username found, register
                     bcrypt.genSalt(10)
                     .then(salt => {
@@ -67,14 +67,14 @@ router.post("/api/user/login", (req, res) => {
             bcrypt.compare(req.body.password, user.password, function(err, isMatch){
                 if(err) throw err;
                 if(isMatch) {
-                    let token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.SECRET, { expiresIn: 360 });
+                    let token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.SECRET, { expiresIn: 1000 });
                     res.json({ success: true, token: token, status: "Login successful." })
                 } else {
-                    return res.status(403).json({status: "Invalid credentials"})
+                    return res.status(400).json({status: "Invalid credentials"})
                 }
             })
         } else {
-            return res.status(403).json({status: "Invalid credentials"})
+            return res.status(400).json({status: "Invalid credentials"})
         }
     })
 })

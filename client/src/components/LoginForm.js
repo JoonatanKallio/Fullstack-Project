@@ -1,14 +1,17 @@
-import { Button, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
+
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [notification, setNotification] = useState()
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch("/api/user/login",{
+        const res = await fetch("/api/user/login",{
             method: "POST",
             body: JSON.stringify({
                 email: email,
@@ -18,29 +21,35 @@ function LoginForm() {
                 "Content-Type": "application/json"
             }
         })
-        .then(res => res.json())
-        .then((data) => {
-            console.log(data)
-            if(data.status === "Login successful.") { //STATUS NUMEROLLA PITÄÄ SÄÄTÄÄ TÄÄ
-                console.log(data.token)
-                localStorage.setItem("token", data.token)
-                navigate("/");
-            }
-        })
-    } // #1E8759
+        
+        if(res.status === 200) {
+            const data = await res.json()
+            localStorage.setItem("token", data.token)
+            navigate("/");
+        } else {
+            const data = await res.json()
+            setNotification(data.status)
+        }
+        
+            
+      
+    } 
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <>
+            <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} component="form" onSubmit={handleSubmit}>
+                <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    <h1>Login here</h1>
+                    <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                    <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
+                    <br/>
+                    <Notifications notifs={notification}></Notifications>
+                    <Button sx={{marginTop: 3}} variant="contained" type="submit">Login</Button>
+                </Box>
                 
-                <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+            </Box>
                 
-                
-                <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
-                <br/>
-                <Button sx={{marginTop: 3}} variant="contained" type="submit">Login</Button>
-            </form>
-        </div>
+        </>
     )
   }
 export default LoginForm;

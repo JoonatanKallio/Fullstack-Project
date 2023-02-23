@@ -1,15 +1,18 @@
-import { Button, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
+
 function RegisterForm() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [notification, setNotification] = useState()
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        fetch("/api/user/register", {
+        const res = await fetch("/api/user/register", {
             method: "POST",
             body: JSON.stringify({
                 email: email,
@@ -20,29 +23,44 @@ function RegisterForm() {
                 "Content-Type": "application/json"
             }
         })
-        .then(res => res.json())
-        .then((data) => {
-            console.log(data.status)
-            if(data.status === "New user created.") { //STATUS NUMEROLLA PITÄÄ SÄÄTÄÄ TÄÄ
-                navigate("/login");
+        if(res.status=== 201) {
+            navigate("/login");
+        } else if(res.status === 400) {
+            const data = await res.json();
+            if(data.status) {
+                setNotification(data.status)
+            } else if(data.errors) {
+                if(data.errors[0].param === "email") {
+                    console.log(data)
+                    setNotification("Not an email")
+                } else if(data.errors[0].param === "password") {
+                    setNotification("Password is not strong enough. (8 characters, 1 upper and lowercase, 1 number and 1 special character)")
+                } else if (data.errors[0].param ===  "username") {
+                    setNotification("Username must be 3 characters long.")
+                }
             }
-        })
+            
+            
+            
+            
+            
+        }
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                
+        <>
+            <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} component="form" onSubmit={handleSubmit} >
+
                 <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
                 
                 <TextField sx={{margin: 2}} id="outlined-basic" label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
                 
                 <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 <br/>
-                
+                <Notifications notifs={notification}/>
                 <Button variant="contained" type="submit">Register</Button>
-            </form>
-        </div>
+            </Box>
+        </>
     )
   }
 export default RegisterForm;

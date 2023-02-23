@@ -1,6 +1,11 @@
-import { Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
+
+import { convertToRaw, EditorState } from 'draft-js';
 import { useEffect, useState } from 'react';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
 
 function ListPost({data, navigate}) {
     const handleClick = (id) => {
@@ -15,44 +20,85 @@ function ListPost({data, navigate}) {
     )
 }
 
+
+
 function Loggedin({data, navigate}) {
-    const [newPost, setNewPost] = useState()
+    const [editorState, setEditorState] = useState(EditorState.createEmpty())
     const [title, setTitle] = useState()
+    const [notification, setNotification] = useState()
+
     const createPost = async () => {
-        const res = await fetch("/api/upload/post", {
-            method: "POST",
-            body: JSON.stringify({
-                title: title,
-                content: newPost
-            }),
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": "Bearer " + localStorage.getItem("token")
+        if(title) {
+            const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+            const res = await fetch("/api/upload/post", {
+                method: "POST",
+                body: JSON.stringify({
+                    title: title,
+                    content: raw
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": "Bearer " + localStorage.getItem("token")
+                }
+            })
+            if (res.status === 201) {
+                window.location.reload()
             }
-        })
-        if (res.status === 201) {
-            window.location.reload()
+        } else {
+            setNotification("Please add a title")
         }
+        
     }
 
+    function onEditorStateChange (editorState) {
+        setEditorState(editorState)
+    }
+    
+
+
+
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
-            <h1>Create a post</h1>
-            <TextField id="outlined-basic" label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
-            <TextField multiline id="outlined-basic" label="Post" variant="outlined" onChange={(e) => setNewPost(e.target.value)}></TextField>
-            <Button onClick={createPost} style={{marginTop: 20}} variant="contained" color="primary">Create a post</Button>
+        <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column"}}>
+
+            <Box component="form">
+                <Box sx={{display: "flex", flexDirection: "column", alignItems: "center",width: "100%"}}>
+                    <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black"}}>
+                        <Typography sx={{fontSize: "32px", margin: "10px"}}>Create a post</Typography>
+                        <TextField sx={{margin: "10px"}}id="title outlined-basic" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
+                        <Box sx={{width: "100%"}}>
+                            <Editor
+                                editorState={editorState}
+                                toolbarClassName="toolbarClassName"
+                                wrapperClassName="wrapperClassName"
+                                editorClassName="editorClassName"
+                                onEditorStateChange={onEditorStateChange}
+                            />
+                        </Box>
+                        <Button onClick={createPost} style={{marginTop: 20, marginBottom: 20}} variant="contained" color="primary" type='submit'>Post</Button>
+                    </Box>
+                    
+
+                </Box>
+            </Box>
+           
+            
+           
+            <Box>
             <h1>Current posts</h1>
             <ListPost data={data} navigate={navigate}/>
-        </div>
+            </Box>
+            
+        </Box>
+        
     )
 }
 
 function Notloggedin ({data, navigate}) {
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
+        <Box style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
                 <h1>Current posts</h1>
                 <ListPost data={data} navigate={navigate}/>
-        </div>
+        </Box>
     )
 }
 
