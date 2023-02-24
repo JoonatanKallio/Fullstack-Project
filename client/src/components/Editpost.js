@@ -48,6 +48,7 @@ function Editpost() {
 
     const handleClick = async () => {
         const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+        console.log(raw)
         const res = await fetch("/api/edit/post", {
             method: "PUT",
             body: JSON.stringify({

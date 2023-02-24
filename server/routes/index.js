@@ -67,7 +67,7 @@ router.post("/api/user/login", (req, res) => {
             bcrypt.compare(req.body.password, user.password, function(err, isMatch){
                 if(err) throw err;
                 if(isMatch) {
-                    let token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.SECRET, { expiresIn: 1000 });
+                    let token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.SECRET, { expiresIn: 10000 });
                     res.json({ success: true, token: token, status: "Login successful." })
                 } else {
                     return res.status(400).json({status: "Invalid credentials"})
