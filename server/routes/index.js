@@ -166,17 +166,29 @@ router.get("/api/list/comments/:id", (req, res) => {
     }).populate("author")
 })
 
+//one comment getter
+router.get("/api/list/comment/:id", (req, res) => {
+    console.log(req.params.id)
+    Comments.findOne({ _id: req.params.id }, function (err, comments) {
+        if(err) throw err;
+        if(comments) {
+            console.log(comments)
+            return res.json(comments).status(200)
+        } else {
+            return res.status(404)
+        }
+    }).populate("author")
+})
 
 router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (req, res) => {
     
     Posts.findById({_id: req.body.id}, function(err, post) {
+        if(err) throw err;
         if(post) {
             const token = req.headers.authorization
             const tokenContent = token.split(".")
             const decode = atob(tokenContent[1])
             const json = JSON.parse(decode)
-            
-            
             if(json.id === post.owner.id) {
                 Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) {
                     if(err) throw err;
@@ -189,10 +201,29 @@ router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (
             }
         }
     }).populate("owner")
+})
 
-
-    
-
+router.put("/api/edit/comment" , passport.authenticate("jwt", { session: false }), (req, res) => {
+    Comments.findById({_id: req.body.id}, function(err, comment) {
+        if(err) throw err;
+        if(comment) {
+            const token = req.headers.authorization
+            const tokenContent = token.split(".")
+            const decode = atob(tokenContent[1])
+            const json = JSON.parse(decode)
+            console.log(req.body.content)
+            if(json.id === comment.author._id.toString()) {
+                Comments.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, comment) {
+                    if(err) throw err;
+                    if(comment) {
+                        res.json({status: "updated"})
+                    }
+                })
+            } else {
+                res.json({status: "Not authorized"}).status(401)
+            }
+        }
+    }).populate("author").populate("post")
 })
 
 module.exports = router;

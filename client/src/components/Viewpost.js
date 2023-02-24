@@ -37,7 +37,26 @@ const handleEditClick = (postid, navigate) => {
     navigate("/post/edit/"+ postid)
 }
 
+const handleCommentEdit = (commentId, navigate) => {
+    navigate("/comment/edit/"+commentId)
+}
+
+function EditCmt({userId, cAuthor, commentId, navigate}) {
+    const token = userId
+    const tokenContent = token.split(".")
+    const decode = atob(tokenContent[1])
+    const json = JSON.parse(decode)
+    console.log(commentId)
+    if(json.id === cAuthor._id) {
+        return (
+            <Button onClick={() => handleCommentEdit(commentId, navigate)}>Edit comment</Button>
+        )
+    }
+    
+}
+
 function EditBtn({post, navigate}) {
+    if(localStorage.getItem("token")) {
     const token = localStorage.getItem("token")
     const tokenContent = token.split(".")
     const decode = atob(tokenContent[1])
@@ -45,29 +64,20 @@ function EditBtn({post, navigate}) {
    
     if(post.owner._id === json.id) {
         return (
-            <Button onClick={() => handleEditClick(post._id, navigate)}>OWNER</Button>
+            <Button onClick={() => handleEditClick(post._id, navigate)}>Edit post</Button>
         )
     }
 }
+}
 
 function PostInfo({post, navigate}) {
-    let create = DateTime.fromJSDate(new Date(post.createdAt)).toObject()
-    console.log(create)
-    let update = DateTime.fromJSDate(new Date(post.updatedAt)).toObject()
-    if(create.minute < 10) {
-        create.minute = "0" + create.minute
-    } 
-
-    if(update.minute < 10) {
-        update.minute = "0" + update.minute
-    } 
     if(post.createdAt >= post.updatedAt) {
         return (
             <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word'}}>
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
                 <Typography>Posted @{post.owner.username}</Typography>
-                <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString()} at {create.hour}:{create.minute}</Typography>
+                <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 <EditBtn post={post} navigate={navigate}></EditBtn>
             </Box>
         )
@@ -77,7 +87,7 @@ function PostInfo({post, navigate}) {
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
                 <Typography>Posted @{post.owner.username}</Typography>
-                <Typography>Updated {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString()}  at {update.hour}:{update.minute}</Typography>
+                <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 <EditBtn post={post} navigate={navigate}></EditBtn>
             </Box>
         )
@@ -87,6 +97,26 @@ function PostInfo({post, navigate}) {
     
 }
 
+function Comment ({comment}) {
+    if(comment.createdAt >= comment.updatedAt) {
+        return (
+            <>
+            <Typography>{comment.content} | @{comment.author.username} </Typography>
+            <Typography>Created {DateTime.fromJSDate(new Date(comment.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+            </>
+        )
+    } else {
+        return (
+            <>
+            <Typography>{comment.content} | @{comment.author.username} </Typography>
+            <Typography>Edited {DateTime.fromJSDate(new Date(comment.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+            </>
+        )
+    }
+    
+}
+
+
 function Viewpost() {
     const [post, setPost] = useState("")
     const [comments, setComments] = useState("")
@@ -94,6 +124,7 @@ function Viewpost() {
     const [newComment, setNewComment] = useState()
     const navigate = useNavigate();
     console.log(comments)
+    
     const fetchPost = async () => {
         const res = await fetch("/api/list/post/"+routeParam)
         if(res.status === 200) {
@@ -122,6 +153,8 @@ function Viewpost() {
 
 
 
+    
+
     if(post && comments) {
         if(localStorage.getItem("token")) {
             
@@ -131,8 +164,14 @@ function Viewpost() {
                     <SendComment newComment={newComment} setNewComment={setNewComment} postId={post._id}  navigate={navigate}></SendComment>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>
-                        {comments.map(comment =>              
-                            <Box sx={{fontSize: "24px", backgroundColor: "#dbdbdb", width: "100%", border: "1px solid black"}} key={comment._id}>{comment.content} | By {comment.author.username}</Box>
+                        {comments.map(comment =>        
+                            <Box sx={{fontSize: "24px", backgroundColor: "#dbdbdb", width: "100%", border: "1px solid black"}} key={comment._id}>
+                                <Comment comment={comment}></Comment>
+                                <EditCmt  userId={localStorage.getItem("token")} cAuthor={comment.author} commentId={comment._id} navigate={navigate}></EditCmt>
+                                
+                            </Box>
+
+                         
                         )} 
                     </Box>
                     
@@ -146,7 +185,10 @@ function Viewpost() {
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>
                         {comments.map(comment =>              
-                            <Box sx={{fontSize: "24px", backgroundColor: "#dbdbdb", width: "100%", border: "1px solid black"}} key={comment._id}>{comment.content} | By {comment.author.username}</Box>
+                            <Box sx={{fontSize: "24px", backgroundColor: "#dbdbdb", width: "100%", border: "1px solid black"}} key={comment._id}>
+                                <Comment comment={comment}></Comment>
+
+                            </Box>
                         )} 
                     </Box> 
                 </Box>

@@ -9,9 +9,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 function Editpost() {
+    const navigate = useNavigate()
     const routeParam = useParams().postId
     const [post, setPost] = useState()
     const [editorState, setEditorState] = useState(EditorState.createEmpty(null))
+
+   
     const fetchPost = async () => {
         const res = await fetch("/api/list/post/"+routeParam)
         if(res.status === 200) {
@@ -59,7 +62,8 @@ function Editpost() {
 
         if(res.status === 200) {
             const data = await res.json()
-            console.log(data)
+            navigate("/post/"+ post._id)
+            
         }
     }
 

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
+import EditComment from './components/Editcomment';
 import Editpost from './components/Editpost';
 import Header from './components/Header';
 import Login from './components/Login';
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<><Login/></>}/>
           <Route path="/post/:postId" element={<Viewpost/>}/>
           <Route path="/post/edit/:postId" element={<Editpost/>}/>
+          <Route path="/comment/edit/:commentId" element={<EditComment/>}/>
         </Routes>
         
       </div>
