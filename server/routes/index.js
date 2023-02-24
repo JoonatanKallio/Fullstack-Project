@@ -146,6 +146,7 @@ router.get("/api/list/post/:id", (req, res) => {
     Posts.findById(req.params.id, function (err, post) {
         if(err) throw err;
         if(post) {
+            
             return res.json(post).status(200)
         } else {
             return res.status(404)
@@ -163,6 +164,35 @@ router.get("/api/list/comments/:id", (req, res) => {
             return res.status(404)
         }
     }).populate("author")
+})
+
+
+router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (req, res) => {
+    
+    Posts.findById({_id: req.body.id}, function(err, post) {
+        if(post) {
+            const token = req.headers.authorization
+            const tokenContent = token.split(".")
+            const decode = atob(tokenContent[1])
+            const json = JSON.parse(decode)
+            
+            
+            if(json.id === post.owner.id) {
+                Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) {
+                    if(err) throw err;
+                    if(post) {
+                        res.json({status: "updated"})
+                    }
+                })
+            } else {
+                res.json({status: "Not authorized"}).status(401)
+            }
+        }
+    }).populate("owner")
+
+
+    
+
 })
 
 module.exports = router;

@@ -33,16 +33,58 @@ function SendComment ({newComment, setNewComment, postId, navigate}) {
     )
 }
 
-function PostInfo({post}) {
+const handleEditClick = (postid, navigate) => {
+    navigate("/post/edit/"+ postid)
+}
+
+function EditBtn({post, navigate}) {
+    const token = localStorage.getItem("token")
+    const tokenContent = token.split(".")
+    const decode = atob(tokenContent[1])
+    const json = JSON.parse(decode)
+   
+    if(post.owner._id === json.id) {
+        return (
+            <Button onClick={() => handleEditClick(post._id, navigate)}>OWNER</Button>
+        )
+    }
+}
+
+function PostInfo({post, navigate}) {
+    let create = DateTime.fromJSDate(new Date(post.createdAt)).toObject()
+    console.log(create)
+    let update = DateTime.fromJSDate(new Date(post.updatedAt)).toObject()
+    if(create.minute < 10) {
+        create.minute = "0" + create.minute
+    } 
+
+    if(update.minute < 10) {
+        update.minute = "0" + update.minute
+    } 
+    if(post.createdAt >= post.updatedAt) {
+        return (
+            <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word'}}>
+                <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
+                <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
+                <Typography>Posted @{post.owner.username}</Typography>
+                <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString()} at {create.hour}:{create.minute}</Typography>
+                <EditBtn post={post} navigate={navigate}></EditBtn>
+            </Box>
+        )
+    }  else {
+        return (
+            <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word'}}>
+                <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
+                <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
+                <Typography>Posted @{post.owner.username}</Typography>
+                <Typography>Updated {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString()}  at {update.hour}:{update.minute}</Typography>
+                <EditBtn post={post} navigate={navigate}></EditBtn>
+            </Box>
+        )
+    }
     
-    return (
-        <Box sx={{backgroundColor: "#dbdbdb", width: {sx: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word'}}>
-            <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
-            <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-            <Typography>Posted by: {post.owner.username}</Typography>
-            <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString()}</Typography>
-        </Box>
-    )
+    
+    
 }
 
 function Viewpost() {
@@ -85,7 +127,7 @@ function Viewpost() {
             
             return (
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
-                    <PostInfo post={post}/>
+                    <PostInfo post={post} navigate={navigate}/>
                     <SendComment newComment={newComment} setNewComment={setNewComment} postId={post._id}  navigate={navigate}></SendComment>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>
@@ -100,7 +142,7 @@ function Viewpost() {
         } else {
             return (
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
-                    <PostInfo post={post}/>
+                    <PostInfo post={post} navigate={navigate}/>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>
                         {comments.map(comment =>              
