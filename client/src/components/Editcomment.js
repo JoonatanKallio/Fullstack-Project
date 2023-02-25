@@ -2,9 +2,6 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
-
-
-
 function EditComment() {
     const [comment, setComment] = useState()
     const [text, setText] = useState()
@@ -12,7 +9,7 @@ function EditComment() {
     const routeParam = useParams().commentId
     console.log(routeParam)
     
-    const fetchComment = async () => {
+    const fetchComment = async () => { //Fetch one comment by commentId
         const res = await fetch("/api/list/comment/"+routeParam)
         if(res.status === 200) {
             const data = await res.json();
@@ -27,9 +24,7 @@ function EditComment() {
         fetchComment()
     }, [])
 
-    const handleClick = async () => {
-
-        
+    const handleClick = async () => { //handle save edit click
         const res = await fetch("/api/edit/comment", {
             method: "PUT",
             body: JSON.stringify({
@@ -40,17 +35,14 @@ function EditComment() {
                 "Content-Type": "application/json",
                 "authorization": "Bearer " + localStorage.getItem("token")
             }
-            
         })
         if(res.status === 200) {
             navigate("/post/"+ comment.post)
         }
     }
 
-
     if(comment) {
         return (
-        
             <Box>
                 <Typography>Edit your comment</Typography>
                 <TextField defaultValue={comment.content} onChange={(e) => setText(e.target.value)}></TextField>

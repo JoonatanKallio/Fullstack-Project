@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 router.post("/api/user/register",
 body("email").isEmail().normalizeEmail(),
 body("username").isLength({min: 3}),
-body("password").isLength({ min: 8 }).not().isUppercase().not().isLowercase().not().isNumeric().not().isAlphanumeric().not(),
+body("password").isStrongPassword(),
 (req, res) => {
 //Validation error handling
     const errors = validationResult(req);
@@ -154,6 +154,7 @@ router.get("/api/list/post/:id", (req, res) => {
     }).populate("owner")
 })
 
+//List comments by postId
 router.get("/api/list/comments/:id", (req, res) => {
     Comments.find({ post: req.params.id }, function (err, comments) {
         if(err) throw err;
@@ -166,7 +167,7 @@ router.get("/api/list/comments/:id", (req, res) => {
     }).populate("author")
 })
 
-//one comment getter
+//Get one comment data with commentId
 router.get("/api/list/comment/:id", (req, res) => {
     console.log(req.params.id)
     Comments.findOne({ _id: req.params.id }, function (err, comments) {
@@ -180,8 +181,9 @@ router.get("/api/list/comment/:id", (req, res) => {
     }).populate("author")
 })
 
+
+//Edit post 
 router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (req, res) => {
-    
     Posts.findById({_id: req.body.id}, function(err, post) {
         if(err) throw err;
         if(post) {
@@ -189,8 +191,8 @@ router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (
             const tokenContent = token.split(".")
             const decode = atob(tokenContent[1])
             const json = JSON.parse(decode)
-            if(json.id === post.owner.id) {
-                Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) {
+            if(json.id === post.owner.id) { //Before edit check that user is the post owner
+                Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) { //If it does, edit the post
                     if(err) throw err;
                     if(post) {
                         res.json({status: "updated"})
@@ -203,6 +205,7 @@ router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (
     }).populate("owner")
 })
 
+//Edit comment
 router.put("/api/edit/comment" , passport.authenticate("jwt", { session: false }), (req, res) => {
     Comments.findById({_id: req.body.id}, function(err, comment) {
         if(err) throw err;
@@ -212,8 +215,8 @@ router.put("/api/edit/comment" , passport.authenticate("jwt", { session: false }
             const decode = atob(tokenContent[1])
             const json = JSON.parse(decode)
             console.log(req.body.content)
-            if(json.id === comment.author._id.toString()) {
-                Comments.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, comment) {
+            if(json.id === comment.author._id.toString()) { //First check if user owns the comment 
+                Comments.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, comment) { //If it does, edit comment
                     if(err) throw err;
                     if(comment) {
                         res.json({status: "updated"})

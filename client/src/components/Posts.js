@@ -1,3 +1,4 @@
+
 import { Box, Button, TextField, Typography } from '@mui/material';
 
 import { convertToRaw, EditorState } from 'draft-js';
@@ -5,18 +6,21 @@ import { useEffect, useState } from 'react';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom';
-import Notifications from './Notifications';
 
 function ListPost({data, navigate}) {
+    console.log(data)
     const handleClick = (id) => {
         navigate("/post/"+id)
     }
+
+    
+
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
+        <Box sx={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%" }}>
                 {data.map(post => 
-                    <h2 style={{cursor:'grab', width: "fit-content"}} onClick={() => handleClick(post._id)} key={post._id}>{post.title} | By {post.owner.username}</h2>
+                    <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}}} onClick={() => handleClick(post._id)} key={post._id}>{post.title} | @{post.owner.username}</Box>
                 )}
-        </div>
+        </Box>
     )
 }
 
@@ -59,12 +63,11 @@ function Loggedin({data, navigate}) {
 
     return (
         <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column"}}>
-
             <Box component="form">
                 <Box sx={{display: "flex", flexDirection: "column", alignItems: "center",width: "100%"}}>
                     <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black"}}>
                         <Typography sx={{fontSize: "32px", margin: "10px"}}>Create a post</Typography>
-                        <TextField sx={{margin: "10px"}}id="title outlined-basic" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
+                        <TextField sx={{margin: "10px"}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
                         <Box sx={{width: "100%"}}>
                             <Editor
                                 editorState={editorState}
@@ -74,16 +77,12 @@ function Loggedin({data, navigate}) {
                                 onEditorStateChange={onEditorStateChange}
                             />
                         </Box>
-                        <Button onClick={createPost} style={{marginTop: 20, marginBottom: 20}} variant="contained" color="primary" type='submit'>Post</Button>
+                        <Button onClick={createPost} className="submit-post" style={{marginTop: 20, marginBottom: 20}} variant="contained" color="primary" type='submit'>Post</Button>
                     </Box>
-                    
-
                 </Box>
             </Box>
            
-            
-           
-            <Box>
+            <Box sx={{width: "100%"}}>
             <h1>Current posts</h1>
             <ListPost data={data} navigate={navigate}/>
             </Box>
@@ -95,9 +94,9 @@ function Loggedin({data, navigate}) {
 
 function Notloggedin ({data, navigate}) {
     return (
-        <Box style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
+        <Box style={{width: "100%",display: "flex", flexDirection: "column", alignItems:"center"}}>
                 <h1>Current posts</h1>
-                <ListPost data={data} navigate={navigate}/>
+                <ListPost data={data} navigate={navigate}/> 
         </Box>
     )
 }

@@ -40,11 +40,11 @@ function LoginForm() {
             <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} component="form" onSubmit={handleSubmit}>
                 <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <h1>Login here</h1>
-                    <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
-                    <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
+                    <TextField sx={{margin: 2}} className='login-email' id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                    <TextField sx={{margin: 2}} className='login-password' id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                     <br/>
                     <Notifications notifs={notification}></Notifications>
-                    <Button sx={{marginTop: 3}} variant="contained" type="submit">Login</Button>
+                    <Button sx={{marginTop: 3}} className='login-button' variant="contained" type="submit">Login</Button>
                 </Box>
                 
             </Box>

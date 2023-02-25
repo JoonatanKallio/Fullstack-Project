@@ -40,10 +40,6 @@ function RegisterForm() {
                 }
             }
             
-            
-            
-            
-            
         }
     }
 
@@ -51,14 +47,14 @@ function RegisterForm() {
         <>
             <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} component="form" onSubmit={handleSubmit} >
 
-                <TextField sx={{margin: 2}} id="outlined-basic" label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                <TextField sx={{margin: 2}} id="outlined-basic" className='register-email' label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
                 
-                <TextField sx={{margin: 2}} id="outlined-basic" label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
+                <TextField sx={{margin: 2}} id="outlined-basic" className='register-username' label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
                 
-                <TextField sx={{margin: 2}} id="outlined-basic" label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
+                <TextField sx={{margin: 2}} id="outlined-basic" className='register-password' label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 <br/>
                 <Notifications notifs={notification}/>
-                <Button variant="contained" type="submit">Register</Button>
+                <Button id="register-submit" variant="contained" type="submit">Register</Button>
             </Box>
         </>
     )

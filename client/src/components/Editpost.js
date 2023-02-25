@@ -15,7 +15,7 @@ function Editpost() {
     const [editorState, setEditorState] = useState(EditorState.createEmpty(null))
 
    
-    const fetchPost = async () => {
+    const fetchPost = async () => { //Fetch to get post data by postId
         const res = await fetch("/api/list/post/"+routeParam)
         if(res.status === 200) {
             const data = await res.json();
@@ -31,7 +31,7 @@ function Editpost() {
     }, [])
 
     
-    useEffect(() => {
+    useEffect(() => { //Sets editor state after post has been initialized so post has data to fill the text editor with
         if(post) {
             const json = JSON.parse(post.content);
             const html = draftToHtml(json)
@@ -42,12 +42,12 @@ function Editpost() {
       
     
     
-    function onEditorStateChange (editorState) {
+    function onEditorStateChange (editorState) { //Changes editor state
         setEditorState(editorState)
     }
 
-    const handleClick = async () => {
-        const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+    const handleClick = async () => { //Handles "save edit" click
+        const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))  
         console.log(raw)
         const res = await fetch("/api/edit/post", {
             method: "PUT",
@@ -60,11 +60,8 @@ function Editpost() {
                 "authorization": "Bearer " + localStorage.getItem("token")
             }
         })
-
-        if(res.status === 200) {
-            const data = await res.json()
+        if(res.status === 200) { //If edit successful, navigate back to the post
             navigate("/post/"+ post._id)
-            
         }
     }
 
@@ -82,13 +79,5 @@ function Editpost() {
             <Button onClick={handleClick}>Save edit</Button>
         </Box>
     )
-    
-
-    
-        
-        
-
-    
-    
 }
 export default Editpost;
