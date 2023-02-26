@@ -1,24 +1,43 @@
 
 import { Box, Button, TextField, Typography } from '@mui/material';
-
 import { convertToRaw, EditorState } from 'draft-js';
+import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom';
 
-function ListPost({data, navigate}) {
-    console.log(data)
+
+function PostOverview ({post, navigate}) {
     const handleClick = (id) => {
         navigate("/post/"+id)
     }
 
-    
+    if(post.createdAt >= post.updatedAt) {
+        return(
+            <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Typography>{post.title} | @{post.owner.username}</Typography>
+                <Typography>posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+            </Box>
+        )
+    } else {
+        return(
+            <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Typography>{post.title} | @{post.owner.username}</Typography>
+                <Typography>edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+            </Box>
+        )
+    }
 
+    
+}
+
+function ListPost({data, navigate}) {
+    
     return (
-        <Box sx={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%" }}>
+        <Box sx={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%"}}>
                 {data.map(post => 
-                    <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}}} onClick={() => handleClick(post._id)} key={post._id}>{post.title} | @{post.owner.username}</Box>
+                    <PostOverview key={post._id} post={post} navigate={navigate}></PostOverview>
                 )}
         </Box>
     )
@@ -62,12 +81,12 @@ function Loggedin({data, navigate}) {
 
 
     return (
-        <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column"}}>
+        <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column", marginTop: "10px"}}>
             <Box component="form">
                 <Box sx={{display: "flex", flexDirection: "column", alignItems: "center",width: "100%"}}>
                     <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black"}}>
                         <Typography sx={{fontSize: "32px", margin: "10px"}}>Create a post</Typography>
-                        <TextField sx={{margin: "10px"}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
+                        <TextField sx={{margin: "10px", width: {xs: "90%", sm: "60%"}}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
                         <Box sx={{width: "100%"}}>
                             <Editor
                                 editorState={editorState}
@@ -94,7 +113,9 @@ function Loggedin({data, navigate}) {
 
 function Notloggedin ({data, navigate}) {
     return (
-        <Box style={{width: "100%",display: "flex", flexDirection: "column", alignItems:"center"}}>
+        <Box style={{width: "100%",display: "flex", flexDirection: "column", alignItems:"center", marginTop: "10px"}}>
+                <Typography sx={{fontSize: "32px", fontWeight: "600"}}>Welcome to StackUnderflow!</Typography>
+                <Typography sx={{fontSize: "24px", fontWeight: "600"}}>Login to post or comment.</Typography>
                 <h1>Current posts</h1>
                 <ListPost data={data} navigate={navigate}/> 
         </Box>

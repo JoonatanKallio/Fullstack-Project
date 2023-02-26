@@ -45,7 +45,7 @@ function EditCmt({userId, cAuthor, commentId, navigate}) {
     const tokenContent = token.split(".")
     const decode = atob(tokenContent[1])
     const json = JSON.parse(decode)
-    console.log(commentId)
+    
     if(json.id === cAuthor._id) {
         return (
             <Button onClick={() => handleCommentEdit(commentId, navigate)}>Edit comment</Button>
@@ -139,10 +139,16 @@ function Viewpost() {
         fetchComments()
     }, [])
 
+
+    const handleHomepage = () => {
+        navigate("/")
+    }
+
     if(post && comments) { //Render posts and comments when they are fetched
         if(localStorage.getItem("token")) { //if user is logged in
             return ( 
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
+                    <Button sx={{marginTop: "10px"}} onClick={handleHomepage} variant="contained">Back to homepage</Button>
                     <PostInfo post={post} navigate={navigate}/>
                     <SendComment newComment={newComment} setNewComment={setNewComment} postId={post._id}  navigate={navigate}></SendComment>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
@@ -159,6 +165,7 @@ function Viewpost() {
         } else { //if no user is logged in
             return (
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
+                    <Button sx={{marginTop: "10px"}} onClick={handleHomepage} variant="contained">Back to homepage</Button>
                     <PostInfo post={post} navigate={navigate}/>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>

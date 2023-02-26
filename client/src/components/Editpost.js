@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate, useParams } from 'react-router-dom';
-
+import Notifications from './Notifications';
 
 function Editpost() {
     const navigate = useNavigate()
     const routeParam = useParams().postId
     const [post, setPost] = useState()
     const [editorState, setEditorState] = useState(EditorState.createEmpty(null))
+    const [notification, setNotification] = useState()
 
    
     const fetchPost = async () => { //Fetch to get post data by postId
@@ -21,7 +22,7 @@ function Editpost() {
             const data = await res.json();
             setPost(data)
         } else if(res.status === 404) {   
-            //HANDLE
+            console.log("Error in the fetch.")
         }
     }
 
@@ -62,12 +63,19 @@ function Editpost() {
         })
         if(res.status === 200) { //If edit successful, navigate back to the post
             navigate("/post/"+ post._id)
+        } else {
+            setNotification("Editing failed, relog and try again.")
         }
     }
 
-    return (
-        <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
-            <Box sx={{width: "60%"}}>
+    const handleCancel = () => {
+        navigate("/post/"+post._id)
+    }
+
+    return ( //Returns editor with the post contents inside
+        <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginTop: "10px"}}>
+            <Typography sx={{fontSize: "32px"}}>Edit your post</Typography>
+            <Box sx={{width: {xs: "90%", sm: "60%"}}}>
                     <Editor
                         editorState={editorState}
                         toolbarClassName="toolbarClassName"
@@ -76,7 +84,11 @@ function Editpost() {
                         onEditorStateChange={onEditorStateChange}
                     />
             </Box>
-            <Button onClick={handleClick}>Save edit</Button>
+            <Notifications notifs={notification}></Notifications>
+            <Box>
+                <Button onClick={handleClick}>Save edit</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
+            </Box>
         </Box>
     )
 }
