@@ -26,8 +26,8 @@ function SendComment ({newComment, setNewComment, postId, navigate}) {
     return (
         <Box sx={{display: "flex", flexDirection: "column"}}>
             <h1>Post a comment</h1>
-            <TextField id="outlined-basic" label="Comment" variant="outlined" onChange={(e) => setNewComment(e.target.value)}></TextField>
-            <Button id="outlined" onClick={handleClick}>Send</Button>
+            <TextField id="outlined-basic" className="comment-text" label="Comment" variant="outlined" onChange={(e) => setNewComment(e.target.value)}></TextField>
+            <Button id="outlined" className="comment-submit" onClick={handleClick}>Send</Button>
         </Box>
     )
 }
@@ -48,7 +48,7 @@ function EditCmt({userId, cAuthor, commentId, navigate}) {
     
     if(json.id === cAuthor._id) {
         return (
-            <Button onClick={() => handleCommentEdit(commentId, navigate)}>Edit comment</Button>
+            <Button className='edit-comment' onClick={() => handleCommentEdit(commentId, navigate)}>Edit comment</Button>
         )
     }
 }
@@ -61,7 +61,7 @@ function EditBtn({post, navigate}) {
         const json = JSON.parse(decode)
         if(post.owner._id === json.id) {
             return (
-                <Button onClick={() => handleEditClick(post._id, navigate)}>Edit post</Button>
+                <Button className='edit-post' onClick={() => handleEditClick(post._id, navigate)}>Edit post</Button>
             )
         }
     }

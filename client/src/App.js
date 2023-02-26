@@ -4,6 +4,7 @@ import EditComment from './components/Editcomment';
 import Editpost from './components/Editpost';
 import Header from './components/Header';
 import Login from './components/Login';
+import NoMatchRoute from './components/NoMatchRoute';
 import Posts from './components/Posts';
 import Register from './components/Register';
 import Viewpost from './components/Viewpost';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/post/:postId" element={<Viewpost/>}/>
           <Route path="/post/edit/:postId" element={<Editpost/>}/>
           <Route path="/comment/edit/:commentId" element={<EditComment/>}/>
+          <Route path="*" element={<NoMatchRoute/>}/>
         </Routes>
         
       </div>

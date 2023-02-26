@@ -36,7 +36,7 @@ describe('Test register email', () => {
 
 
 describe('Test password rules', () => {
-  it('Visits the register page', () => {
+  it('Visits the register page and tests good password rules', () => {
     cy.visit('http://localhost:3000/')
     cy.contains("Register").click()
     cy.url().should("include", "/register")
@@ -63,7 +63,7 @@ describe('Test password rules', () => {
 })
 
 describe('Test login page', () => {
-  it('Visits the login page', () => {
+  it('Visits the login page and logs in', () => {
     cy.visit('http://localhost:3000/')
     cy.contains("Login").click()
     cy.url().should("include", "/login")
@@ -77,7 +77,7 @@ describe('Test login page', () => {
 })
 
 describe('Test post', () => {
-  it('Visits the login page', () => {
+  it('Logs in and creates a post', () => {
     cy.visit('http://localhost:3000/')
     cy.contains("Login").click()
     cy.url().should("include", "/login")
@@ -87,7 +87,6 @@ describe('Test post', () => {
     cy.contains("Logout")
     cy.contains("Logged in as yes")
     cy.url().should("include", "/")
-
     cy.get(".post-title-text").type("Title")
     cy.get(".public-DraftStyleDefault-block").type("content content")
     cy.get(".submit-post").click()
@@ -95,4 +94,72 @@ describe('Test post', () => {
   })
 })
 
+describe('Test commenting', () => {
+  it('Logs in and creates comment', () => {
+    cy.visit('http://localhost:3000/')
+    cy.contains("Login").click()
+    cy.url().should("include", "/login")
+    cy.get(".login-email").type("test@email.com")
+    cy.get(".login-password").type("Password#3")
+    cy.get(".login-button").click()
+    cy.contains("Logout")
+    cy.contains("Logged in as yes")
+    cy.url().should("include", "/")
+    cy.contains("Title | @yes").click()
+    cy.get(".comment-text").type("Test comment")
+    cy.get(".comment-submit").click()
+    cy.contains("Test comment | @yes")
+  })
+})
 
+describe('Test post editing', () => {
+  it('Logs in and tests editing the post earlier test', () => {
+    //Login
+    cy.visit('http://localhost:3000/')
+    cy.contains("Login").click()
+    cy.url().should("include", "/login")
+    cy.get(".login-email").type("test@email.com")
+    cy.get(".login-password").type("Password#3")
+    cy.get(".login-button").click()
+    cy.contains("Logout")
+    cy.contains("Logged in as yes")
+    cy.url().should("include", "/")
+    cy.contains("Title | @yes").click()
+    cy.get(".edit-post").click()
+    cy.url().should("include", "/post/edit/")
+    cy.get(".public-DraftStyleDefault-block").type("Test edit")
+    cy.get(".save-post-edit").click()
+    cy.url().should("include", "/post")
+    cy.contains("Test edit")
+  })
+})
+
+describe('Test comment editing', () => {
+  it('Logs in and tests editing the comment earlier test', () => {
+    //Login
+    cy.visit('http://localhost:3000/')
+    cy.contains("Login").click()
+    cy.url().should("include", "/login")
+    cy.get(".login-email").type("test@email.com")
+    cy.get(".login-password").type("Password#3")
+    cy.get(".login-button").click()
+    cy.contains("Logout")
+    cy.contains("Logged in as yes")
+    cy.url().should("include", "/")
+    cy.contains("Title | @yes").click()
+    cy.get(".edit-comment").click()
+    cy.url().should("include", "/comment/edit/")
+    cy.get(".comment-editing-box").type("Test comment edit")
+    cy.get(".save-comment-edit").click()
+    cy.url().should("include", "/post")
+    cy.contains("Test comment edit")
+  })
+})
+
+
+describe('Route test', () => {
+  it('Tests a route that is not defined', () => {
+    cy.visit('http://localhost:3000/notfound123')
+    cy.contains("404: Page not found").click()
+  })
+})

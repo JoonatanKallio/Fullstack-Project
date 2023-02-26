@@ -51,10 +51,10 @@ function EditComment() {
         return ( 
             <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginTop: "10px", gap: "20px"}}>
                 <Typography sx={{fontSize: "32px"}}>Edit your comment</Typography>
-                <TextField defaultValue={comment.content} onChange={(e) => setText(e.target.value)}></TextField>
+                <TextField className="comment-editing-box" defaultValue={comment.content} onChange={(e) => setText(e.target.value)}></TextField>
                 <Notifications notifs={notification}></Notifications>
                 <Box>
-                    <Button onClick={handleClick}>Save edit</Button>
+                    <Button className="save-comment-edit" onClick={handleClick}>Save edit</Button>
                     <Button onClick={handleCancel}>Cancel</Button>
                 </Box>
                 

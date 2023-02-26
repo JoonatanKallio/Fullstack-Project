@@ -86,7 +86,7 @@ function Editpost() {
             </Box>
             <Notifications notifs={notification}></Notifications>
             <Box>
-                <Button onClick={handleClick}>Save edit</Button>
+                <Button className="save-post-edit" onClick={handleClick}>Save edit</Button>
                 <Button onClick={handleCancel}>Cancel</Button>
             </Box>
         </Box>
