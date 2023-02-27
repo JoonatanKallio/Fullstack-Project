@@ -28,7 +28,7 @@ function Editpost() {
 
 
     useEffect(() => {
-        fetchPost()
+        fetchPost();
     }, [])
 
     
@@ -82,6 +82,13 @@ function Editpost() {
                         wrapperClassName="wrapperClassName"
                         editorClassName="editorClassName"
                         onEditorStateChange={onEditorStateChange}
+                        toolbar= {{
+                            options: ['blockType', 'inline', 'fontSize', 'list'],
+                            inline: { inDropdown: true },
+                            fontsize: { inDropdown: true },
+                            blockType: { inDropdown: true },
+                            list: { inDropdown: true }
+                        }}
                     />
             </Box>
             <Notifications notifs={notification}></Notifications>

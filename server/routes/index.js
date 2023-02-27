@@ -26,6 +26,7 @@ body("password").isStrongPassword(),
 (req, res) => {
 //Validation error handling
     const errors = validationResult(req);
+    let userBio = ""
     if(!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
@@ -44,10 +45,14 @@ body("password").isStrongPassword(),
                         return bcrypt.hash(req.body.password, salt)
                     })
                     .then(hash => {
+                        if(req.body.bio) {
+                            userBio = req.body.bio
+                        }
                         new Users({
                         email: req.body.email,
                         username: req.body.username,
-                        password: hash
+                        password: hash,
+                        bio: userBio
                     }).save((err) => {
                         if(err) throw err;
                             return res.status(201).json( {status: "New user created."} )
@@ -78,15 +83,7 @@ router.post("/api/user/login", (req, res) => {
         }
     })
 })
-//For auth testing purposes
-router.get("/api/secret", passport.authenticate("jwt", { session: false }), (req, res) => {
-    const token = req.headers.authorization
-    const tokenContent = token.split(".")
-    const decode = atob(tokenContent[1])
-    const json = JSON.parse(decode)
-    console.log(json.id)
-    return res.json({status:"Success"})
-})
+
 
 //Upload post
 router.post("/api/upload/post", passport.authenticate("jwt", { session: false }), (req, res) => {
@@ -94,7 +91,6 @@ router.post("/api/upload/post", passport.authenticate("jwt", { session: false })
     const tokenContent = token.split(".")
     const decode = atob(tokenContent[1])
     const json = JSON.parse(decode)
-    console.log(json)
     new Posts({
         owner: json.id,
         title: req.body.title,
@@ -102,11 +98,8 @@ router.post("/api/upload/post", passport.authenticate("jwt", { session: false })
         votes: 0
     }).save((err, post) => {
         if(err) throw err;
-        console.log(post)
         return res.status(201).json( {status: "New post created."} )
-        
         })
-
 })
 
 //Upload comment
@@ -115,7 +108,6 @@ router.post("/api/upload/comment", passport.authenticate("jwt", { session: false
     const tokenContent = token.split(".")
     const decode = atob(tokenContent[1])
     const json = JSON.parse(decode)
-    console.log(json)
     new Comments({
         post: req.body.postid,
         author: json.id,
@@ -126,13 +118,24 @@ router.post("/api/upload/comment", passport.authenticate("jwt", { session: false
         })
 })
 
+//get user info with all the user's posts too
+router.get("/api/list/user/:id", (req, res) => {
+    Users.findById({_id: req.params.id}, function(err, user) {
+        if(err) throw err;
+        if(user) {
+            return res.json(user).status(200)
+        } else {
+            return res.send({status: "not ok"})
+        }
+    })
+
+})
 
 //get all posts
 router.get("/api/list/posts", (req, res) => {
     Posts.find({}, function(err, posts) {
         if(err) throw err;
         if(posts) {
-            console.log(posts)
             return res.json(posts).status(200)
         } else {
             return res.send({status: "not ok"})
@@ -159,7 +162,6 @@ router.get("/api/list/comments/:id", (req, res) => {
     Comments.find({ post: req.params.id }, function (err, comments) {
         if(err) throw err;
         if(comments) {
-            console.log(comments)
             return res.json(comments).status(200)
         } else {
             return res.status(404)
@@ -169,17 +171,28 @@ router.get("/api/list/comments/:id", (req, res) => {
 
 //Get one comment data with commentId
 router.get("/api/list/comment/:id", (req, res) => {
-    console.log(req.params.id)
     Comments.findOne({ _id: req.params.id }, function (err, comments) {
         if(err) throw err;
         if(comments) {
-            console.log(comments)
             return res.json(comments).status(200)
         } else {
             return res.status(404)
         }
     }).populate("author")
 })
+
+//Get all posts done by one user
+router.get("/api/list/postsbyuser/:id", (req, res) => {
+    Posts.find({ owner: req.params.id }, function (err, post) {
+        if(err) throw err;
+        if(post) {
+            return res.json(post).status(200)
+        } else {
+            return res.status(404)
+        }
+    }).populate("owner")
+})
+
 
 
 //Edit post 
@@ -214,7 +227,6 @@ router.put("/api/edit/comment" , passport.authenticate("jwt", { session: false }
             const tokenContent = token.split(".")
             const decode = atob(tokenContent[1])
             const json = JSON.parse(decode)
-            console.log(req.body.content)
             if(json.id === comment.author._id.toString()) { //First check if user owns the comment 
                 Comments.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, comment) { //If it does, edit comment
                     if(err) throw err;

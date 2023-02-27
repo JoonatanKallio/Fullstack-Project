@@ -13,6 +13,7 @@ function PostOverview ({post, navigate}) {
         navigate("/post/"+id)
     }
 
+
     if(post.createdAt >= post.updatedAt) {
         return(
             <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
@@ -46,58 +47,14 @@ function ListPost({data, navigate}) {
 
 
 function Loggedin({data, navigate}) {
-    const [editorState, setEditorState] = useState(EditorState.createEmpty())
-    const [title, setTitle] = useState()
-    const [notification, setNotification] = useState()
-
-    const createPost = async () => {
-        if(title) {
-            const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-            const res = await fetch("/api/upload/post", {
-                method: "POST",
-                body: JSON.stringify({
-                    title: title,
-                    content: raw
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": "Bearer " + localStorage.getItem("token")
-                }
-            })
-            if (res.status === 201) {
-                window.location.reload()
-            }
-        } else {
-            setNotification("Please add a title")
-        }
-        
-    }
-
-    function onEditorStateChange (editorState) {
-        setEditorState(editorState)
-    }
-    
-
 
 
     return (
         <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column", marginTop: "10px"}}>
-            <Box component="form">
+            <Box >
                 <Box sx={{display: "flex", flexDirection: "column", alignItems: "center",width: "100%"}}>
-                    <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black"}}>
-                        <Typography sx={{fontSize: "32px", margin: "10px"}}>Create a post</Typography>
-                        <TextField sx={{margin: "10px", width: {xs: "90%", sm: "60%"}}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
-                        <Box sx={{width: "100%"}}>
-                            <Editor
-                                editorState={editorState}
-                                toolbarClassName="toolbarClassName"
-                                wrapperClassName="wrapperClassName"
-                                editorClassName="editorClassName"
-                                onEditorStateChange={onEditorStateChange}
-                            />
-                        </Box>
-                        <Button onClick={createPost} className="submit-post" style={{marginTop: 20, marginBottom: 20}} variant="contained" color="primary" type='submit'>Post</Button>
-                    </Box>
+                    <Typography sx={{fontSize: "32px", fontWeight: "600"}}>Welcome to StackUnderflow!</Typography>
+                    <Button sx={{margin: "10px"}}variant="contained" onClick={() => navigate("/post/create")}>Create a post</Button>
                 </Box>
             </Box>
            

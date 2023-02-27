@@ -29,12 +29,16 @@ function Header() {
         navigate("/")
     }
 
-    let user
+    let user;
     if(localStorage.getItem("token")){
-      let token = localStorage.getItem("token")
-      const tokenContent = token.split(".")
-      const decode = atob(tokenContent[1])
-      user = JSON.parse(decode)
+        let token = localStorage.getItem("token")
+        const tokenContent = token.split(".")
+        const decode = atob(tokenContent[1])
+        user = JSON.parse(decode)
+    }
+
+    const profileClick = () => {
+        navigate("/user/"+user.id)
     }
 
     if(user){
@@ -46,10 +50,9 @@ function Header() {
                         <Sitename navigate={navigate}/>
 
                         <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <Typography sx={{ display: { xs: "none", sm: "inline"}, fontWeight: 600, marginRight: 2}}>
-                                Logged in as {user.username}
-                            </Typography>
-                            <Button style={{fontWeight: 600, margin: 5}} onClick={logoutClick} variant="outlined" color="inherit">Logout</Button> 
+                            
+                            <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={profileClick} variant="outlined" color="inherit">Profile</Button> 
+                            <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}}  onClick={logoutClick} variant="outlined" color="inherit">Logout</Button> 
                         </Box>
                     </Toolbar>
                 </AppBar>
@@ -63,10 +66,10 @@ function Header() {
 
                         <Sitename navigate={navigate}/>
 
-                        <div>
+                        <Box>
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={loginClick} variant="outlined" color="inherit">Login</Button>
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={registerClick} variant="outlined" color="inherit">Register</Button>
-                        </div>
+                        </Box>
                     </Toolbar>
                 </AppBar>
             </Box>

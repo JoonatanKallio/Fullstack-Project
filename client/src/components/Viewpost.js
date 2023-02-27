@@ -67,13 +67,20 @@ function EditBtn({post, navigate}) {
     }
 }
 
+
+
 function PostInfo({post, navigate}) {
+    const goToProfile = () => {
+        navigate("/user/"+post.owner._id)
+    }
+
     if(post.createdAt >= post.updatedAt) {
         return (
             <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-                <Typography>Posted @{post.owner.username}</Typography>
+                <Typography sx={{display: "inline"}}>Posted by:</Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
                 <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 <EditBtn post={post} navigate={navigate}></EditBtn>
             </Box>
@@ -83,7 +90,8 @@ function PostInfo({post, navigate}) {
             <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-                <Typography>Posted @{post.owner.username}</Typography>
+                <Typography sx={{display: "inline"}}>Posted</Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
                 <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 <EditBtn post={post} navigate={navigate}></EditBtn>
             </Box>
