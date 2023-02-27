@@ -70,7 +70,7 @@ function CreatePost() {
                     <Notifications notifs={notification}></Notifications>
                     <Box>
                         <Button onClick={(e) => createPost(e)} className="submit-post" style={{marginTop: 20, marginBottom: 20, marginRight: "10px"}} variant="contained" color="primary" type='submit'>Submit</Button>
-                        <Button onClick={navmenu} className="submit-post" style={{marginTop: 20, marginBottom: 20, marginLeft: "10px"}} variant="contained" color="primary" type='submit'>Cancel</Button>
+                        <Button onClick={navmenu} style={{marginTop: 20, marginBottom: 20, marginLeft: "10px"}} variant="contained" color="primary" type='submit'>Cancel</Button>
                     </Box>
                 </Box>
             </Box>

@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 
-import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
+import { ContentState, convertFromHTML, convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -35,10 +35,8 @@ function Editpost() {
     useEffect(() => { //Sets editor state after post has been initialized so post has data to fill the text editor with
         if(post) {
             const json = JSON.parse(post.content);
-            const html = draftToHtml(json)
-            setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(html))));
+            setEditorState(EditorState.createWithContent(convertFromRaw(json)));
         }   
-        
     }, [post]);
       
     

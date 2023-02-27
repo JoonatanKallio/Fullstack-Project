@@ -49,11 +49,11 @@ function UserInfo() {
                             <Typography>User profile created: {DateTime.fromJSDate(new Date(user.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                             <Typography>Bio: {user.bio}</Typography>
                         </Box>
-                        <Typography sx={{fontSize: "24px"}}>Posts by user</Typography>
+                        <Typography sx={{fontSize: "24px"}}>Posts from @{user.username}</Typography>
                         <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>   
                             {posts.map(post =>        
-                                <Box sx={{fontSize: "24px", width: "100%", border: "1px solid black"}} key={post._id}>
-                                    <Typography>{post.title}</Typography>  
+                                <Box sx={{fontSize: "12px", width: "100%", border: "1px solid black"}} key={post._id}>
+                                    <Typography>Title: {post.title}</Typography>  
                                     <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box> 
                                 </Box>
                             )} 
