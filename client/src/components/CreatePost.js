@@ -50,7 +50,7 @@ function CreatePost() {
             <Box  sx={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <Box component="form" sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black", marginTop: "20px"}}>
                     <Typography sx={{fontSize: "32px", margin: "10px"}}>Create a post</Typography>
-                    <TextField sx={{margin: "10px", width: {xs: "90%", sm: "60%"}}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
+                    <TextField inputProps={{ maxLength: 60 }} sx={{margin: "10px", width: {xs: "90%", sm: "60%"}}}id="title outlined-basic" className="post-title-text" required label="Title" variant="outlined" onChange={(e) => setTitle(e.target.value)}></TextField>
                     <Box sx={{width: "100%"}}>
                         <Editor
                             editorState={editorState}

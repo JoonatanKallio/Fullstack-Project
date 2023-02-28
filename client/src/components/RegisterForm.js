@@ -49,11 +49,11 @@ function RegisterForm() {
         <>
             <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} component="form" onSubmit={handleSubmit} >
 
-                <TextField sx={{margin: 2}} id="outlined-basic" className='register-email' label="Email" variant="outlined" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
+                <TextField sx={{margin: 2}} id="outlined-basic" className='register-email' label="Email" variant="outlined" type="email" required={true}  onChange={(e) => setEmail(e.target.value)}></TextField>
                 
                 <TextField sx={{margin: 2}} id="outlined-basic" className='register-username' label="Username" variant="outlined" required={true}  onChange={(e) => setUsername(e.target.value)}></TextField>
                 
-                <TextField sx={{margin: 2}} id="outlined-basic" className='register-password' label="Password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
+                <TextField sx={{margin: 2}} id="outlined-basic" className='register-password' label="Password" type="password" variant="outlined" required={true}  onChange={(e) => setPassword(e.target.value)}></TextField>
                 
                 <TextField sx={{margin: 2}} id="outlined-basic" className='register-bio' label="Bio" variant="outlined" onChange={(e) => setBio(e.target.value)}></TextField>
                 <br/>

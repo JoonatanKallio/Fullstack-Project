@@ -6,13 +6,15 @@ import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function SendComment ({newComment, setNewComment, postId, navigate}) {
+function SendComment ({newComment, setNewComment, post, navigate}) {
+    console.log(post.solved)
     const handleClick = async () => {
         const res = await fetch("/api/upload/comment", {
             method: "POST",
             body: JSON.stringify({
-                postid: postId,
-                content: newComment
+                postid: post._id,
+                content: newComment,
+                solved: post.solved
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -23,13 +25,15 @@ function SendComment ({newComment, setNewComment, postId, navigate}) {
             window.location.reload()
         }
     }
-    return (
-        <Box sx={{display: "flex", flexDirection: "column"}}>
-            <h1>Post a comment</h1>
-            <TextField id="outlined-basic" className="comment-text" label="Comment" variant="outlined" onChange={(e) => setNewComment(e.target.value)}></TextField>
-            <Button id="outlined" className="comment-submit" onClick={handleClick}>Send</Button>
-        </Box>
-    )
+    if(post.solved !== true) {
+        return (
+            <Box sx={{display: "flex", flexDirection: "column"}}>
+                <h1>Post a comment</h1>
+                <TextField id="outlined-basic" className="comment-text" label="Comment" variant="outlined" onChange={(e) => setNewComment(e.target.value)}></TextField>
+                <Button sx={{marginTop: "10px"}} variant="contained" id="outlined" className="comment-submit" onClick={handleClick}>Send</Button>
+            </Box>
+        )
+    }
 }
 
 const handleEditClick = (postid, navigate) => {
@@ -61,7 +65,39 @@ function EditBtn({post, navigate}) {
         const json = JSON.parse(decode)
         if(post.owner._id === json.id) {
             return (
-                <Button className='edit-post' onClick={() => handleEditClick(post._id, navigate)}>Edit post</Button>
+                <Button sx={{margin: "5px"}} variant="contained" className='edit-post' onClick={() => handleEditClick(post._id, navigate)}>Edit post</Button>
+            )
+        }
+    }
+}
+
+const markAsSolved = async (postid, navigate) => {
+    const res = await fetch("/api/solve/post", {
+        method: "PUT",
+        body: JSON.stringify({
+            id: postid,
+            solved: true
+        }),
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": "Bearer " + localStorage.getItem("token")
+        }
+    })
+    if (res.status === 201) {
+        window.location.reload()
+    }
+
+}
+
+function SolveBtn({post, navigate}) {
+    if(localStorage.getItem("token")) {
+        const token = localStorage.getItem("token")
+        const tokenContent = token.split(".")
+        const decode = atob(tokenContent[1])
+        const json = JSON.parse(decode)
+        if(post.owner._id === json.id) {
+            return (
+                <Button sx={{margin: "5px"}} variant="contained" className='mark-as-solved' onClick={() => markAsSolved(post._id, navigate)}>Mark as solved</Button>
             )
         }
     }
@@ -82,35 +118,65 @@ function PostInfo({post, navigate}) {
                 <Typography sx={{display: "inline"}}>Posted by:</Typography>
                 <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
                 <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-                <EditBtn post={post} navigate={navigate}></EditBtn>
+                <Box>
+                    <EditBtn post={post} navigate={navigate}></EditBtn>
+                    <SolveBtn post={post} navigate={navigate}></SolveBtn>
+                </Box>
             </Box>
         )
     }  else {
-        return (
-            <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
-                <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
-                <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-                <Typography sx={{display: "inline"}}>Posted</Typography>
-                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
-                <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-                <EditBtn post={post} navigate={navigate}></EditBtn>
-            </Box>
-        )
+        if(post.solved === true) {
+            return (
+                <Box sx={{backgroundColor: "lightGreen", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+                    <Typography sx={{fontSize: "24px", textDecoration: "underline"}}>This question has been solved.</Typography>
+                    <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
+                    <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
+                    <Typography sx={{display: "inline"}}>Posted</Typography>
+                    <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
+                    <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+                    <Box>
+                        <EditBtn post={post} navigate={navigate}></EditBtn>
+                        
+                    </Box>
+                </Box>
+            )
+        } else {
+            return (
+                <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+                    <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
+                    <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
+                    <Typography sx={{display: "inline"}}>Posted</Typography>
+                    <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
+                    <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+                    <Box>
+                        <EditBtn post={post} navigate={navigate}></EditBtn>
+                        <SolveBtn post={post}></SolveBtn>
+                    </Box>
+                </Box>
+            )
+        }
+        
     }
 }
 
 function Comment ({comment}) { //Different returns if the comment has been edited or not
+    const navigate = useNavigate()
+    const goToProfile = () => {
+        navigate("/user/"+comment.author._id)
+    }
     if(comment.createdAt >= comment.updatedAt) {
         return (
-            <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black"}}>
-                <Typography>{comment.content} | @{comment.author.username} </Typography>
+            <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black", padding: "10px"}}>
+                <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{comment.author.username} </Typography>
                 <Typography>Created {DateTime.fromJSDate(new Date(comment.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Box>
         )
     } else {
         return (
             <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black"}}>
-                <Typography>{comment.content} | @{comment.author.username} </Typography>
+                <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{comment.author.username} </Typography>
                 <Typography>Edited {DateTime.fromJSDate(new Date(comment.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Box>
         )
@@ -158,7 +224,7 @@ function Viewpost() {
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
                     <Button sx={{marginTop: "10px"}} onClick={handleHomepage} variant="contained">Back to homepage</Button>
                     <PostInfo post={post} navigate={navigate}/>
-                    <SendComment newComment={newComment} setNewComment={setNewComment} postId={post._id}  navigate={navigate}></SendComment>
+                    <SendComment newComment={newComment} setNewComment={setNewComment} post={post}  navigate={navigate}></SendComment>
                     <Box sx={{display: "flex", flexDirection: "column", width: { xs: "90%", sm: "60%"}, alignItems: "center"}}>
                         <Typography sx={{fontSize: "32px"}}>Comments:</Typography>
                         {comments.map(comment =>        

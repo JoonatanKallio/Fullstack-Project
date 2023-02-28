@@ -18,16 +18,26 @@ function PostOverview ({post, navigate}) {
         return(
             <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                 <Typography>{post.title} | @{post.owner.username}</Typography>
-                <Typography>posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+                <Typography>Created {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Box>
         )
     } else {
-        return(
-            <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
-                <Typography>{post.title} | @{post.owner.username}</Typography>
-                <Typography>edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-            </Box>
-        )
+        if(post.solved === true) {
+            return(
+                <Box sx={{cursor:'grab', backgroundColor: "lightGreen", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                    <Typography>{post.title} | @{post.owner.username}</Typography>
+                    <Typography>Marked as solved {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+                </Box>
+            )
+        } else {
+            return(
+                <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                    <Typography>{post.title} | @{post.owner.username}</Typography>
+                    <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
+                </Box>
+            )
+        }
+        
     }
 
     

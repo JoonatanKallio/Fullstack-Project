@@ -108,14 +108,19 @@ router.post("/api/upload/comment", passport.authenticate("jwt", { session: false
     const tokenContent = token.split(".")
     const decode = atob(tokenContent[1])
     const json = JSON.parse(decode)
-    new Comments({
-        post: req.body.postid,
-        author: json.id,
-        content: req.body.content 
-    }).save((err) => {
-        if(err) return res.status(404).json({status: "Post body didn't have required data."});
-        return res.status(201).json( {status: "New comment created."} )
+    if(req.body.solved === false) {
+        new Comments({
+            post: req.body.postid,
+            author: json.id,
+            content: req.body.content 
+        }).save((err) => {
+            if(err) return res.status(404).json({status: "Post body didn't have required data."});
+            return res.status(201).json( {status: "New comment created."} )
         })
+
+    }
+    
+    
 })
 
 //get user info with all the user's posts too
@@ -240,5 +245,29 @@ router.put("/api/edit/comment" , passport.authenticate("jwt", { session: false }
         }
     }).populate("author").populate("post")
 })
+
+//put solved to a post
+router.put("/api/solve/post", passport.authenticate("jwt", { session: false }), (req, res) => {
+    Posts.findById({_id: req.body.id}, function(err, post) {
+        if(err) throw err;
+        if(post) {
+            const token = req.headers.authorization
+            const tokenContent = token.split(".")
+            const decode = atob(tokenContent[1])
+            const json = JSON.parse(decode)
+            if(json.id === post.owner.id) { //Before edit check that user is the post owner
+                Posts.findByIdAndUpdate({_id: req.body.id}, {solved: req.body.solved}, function(err, post) { //If it does, edit the post
+                    if(err) throw err;
+                    if(post) {
+                        res.status(201).json({status: "updated"})
+                    }
+                })
+            } else {
+                res.json({status: "Not authorized"}).status(401)
+            }
+        }
+    }).populate("owner")
+})
+
 
 module.exports = router;
