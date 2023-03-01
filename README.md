@@ -7,3 +7,5 @@ First install packages by typing `npm run install` in the root folder and it ins
 Then run the project server first in windows `SET NODE_ENV=develpoment& npm run dev:server`
 
 Then run the client `npm run dev:client`
+
+To run the cypress tests, type `npm run test` 
