@@ -64,6 +64,6 @@ passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
 
 
 module.exports = app;
-//SET NODE_ENV=production& npm run dev:server for running the server
+//SET NODE_ENV=development& npm run dev:server for running the server
 //tester@gmail.com
 //TestiS4l1!
