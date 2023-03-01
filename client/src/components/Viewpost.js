@@ -168,7 +168,7 @@ function Comment ({comment}) { //Different returns if the comment has been edite
         return (
             <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black", padding: "10px"}}>
                 <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
-                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{comment.author.username} </Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}> @{comment.author.username} </Typography>
                 <Typography>Created {DateTime.fromJSDate(new Date(comment.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Box>
         )
@@ -176,7 +176,7 @@ function Comment ({comment}) { //Different returns if the comment has been edite
         return (
             <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black"}}>
                 <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
-                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{comment.author.username} </Typography>
+                <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}> @{comment.author.username} </Typography>
                 <Typography>Edited {DateTime.fromJSDate(new Date(comment.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Box>
         )

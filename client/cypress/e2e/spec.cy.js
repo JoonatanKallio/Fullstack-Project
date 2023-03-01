@@ -109,7 +109,7 @@ describe('Test commenting', () => {
     cy.contains("Title | @yes").click()
     cy.get(".comment-text").type("Test comment")
     cy.get(".comment-submit").click()
-    cy.contains("Test comment | @yes")
+    cy.contains("Test comment @yes")
   })
 })
 
