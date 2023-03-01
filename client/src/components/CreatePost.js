@@ -17,7 +17,7 @@ function CreatePost() {
         navigate("/")
     }
 
-    const createPost = async (e) => {
+    const createPost = async (e) => { //Sends post method to create post 
         e.preventDefault()
         if(title) {
             const raw = JSON.stringify(convertToRaw(editorState.getCurrentContent()))
@@ -41,11 +41,11 @@ function CreatePost() {
         
     }
 
-    function onEditorStateChange (editorState) {
+    function onEditorStateChange (editorState) { //Wysiwyg editor state changer
         setEditorState(editorState)
     }
 
-    if(localStorage.getItem("token")) {
+    if(localStorage.getItem("token")) { //If user logged in return editor
         return (
             <Box  sx={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <Box component="form" sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black", marginTop: "20px"}}>

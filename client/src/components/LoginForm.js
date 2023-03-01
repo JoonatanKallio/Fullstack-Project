@@ -9,7 +9,7 @@ function LoginForm() {
     const [notification, setNotification] = useState()
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //Post request to submit login
         e.preventDefault();
         const res = await fetch("/api/user/login",{
             method: "POST",

@@ -2,10 +2,11 @@ import { AppBar, Box, Button, Grid, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 
-function Sitename ({navigate}) {
+function Sitename ({navigate}) { //Returns logo text that can be clicked to go to home page
     const logoclick = () => {
         navigate("/")
     }
+
     return (
         <Typography sx={{  fontSize:{ xs: "24px", sm: "32px"}, cursor: "grab"}}onClick={logoclick} variant="h5" noWrap component="div">
             Stack Underflow
@@ -30,7 +31,7 @@ function Header() {
     }
 
     let user;
-    if(localStorage.getItem("token")){
+    if(localStorage.getItem("token")){ //Takes token to see if logged in
         let token = localStorage.getItem("token")
         const tokenContent = token.split(".")
         const decode = atob(tokenContent[1])
@@ -46,11 +47,8 @@ function Header() {
             <Grid>
                 <AppBar position="static">
                     <Toolbar sx={{ display: "flex", justifyContent: "space-between", height:  "50.5px"}}variant="dense">
-
                         <Sitename navigate={navigate}/>
-
                         <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={profileClick} variant="outlined" color="inherit">Profile</Button> 
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}}  onClick={logoutClick} variant="outlined" color="inherit">Logout</Button> 
                         </Box>
@@ -63,9 +61,7 @@ function Header() {
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar  sx={{display: "flex", justifyContent: "space-between", height:  "50.5px" }}variant="dense">
-
                         <Sitename navigate={navigate}/>
-
                         <Box>
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={loginClick} variant="outlined" color="inherit">Login</Button>
                             <Button sx={{fontWeight: 600, padding: {xs: "2px"}, margin: {xs: "5px", sm: "10px"}}} onClick={registerClick} variant="outlined" color="inherit">Register</Button>

@@ -1,5 +1,5 @@
 
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { convertToRaw, EditorState } from 'draft-js';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
@@ -13,28 +13,27 @@ function PostOverview ({post, navigate}) {
         navigate("/post/"+id)
     }
 
-
-    if(post.createdAt >= post.updatedAt) {
+    if(post.createdAt >= post.updatedAt) { //if post has been created and not edited return this
         return(
-            <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+            <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                 <Typography>{post.title} | @{post.owner.username}</Typography>
                 <Typography>Created {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-            </Box>
+            </Paper>
         )
-    } else {
-        if(post.solved === true) {
+    } else { //if post has been edited after creating return this
+        if(post.solved === true) { //If post has been solved return green background
             return(
-                <Box sx={{cursor:'grab', backgroundColor: "lightGreen", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightGreen", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                     <Typography>{post.title} | @{post.owner.username}</Typography>
                     <Typography>Marked as solved {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-                </Box>
+                </Paper>
             )
-        } else {
+        } else { //If post has not been solved return gray background
             return(
-                <Box sx={{cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                     <Typography>{post.title} | @{post.owner.username}</Typography>
                     <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-                </Box>
+                </Paper>
             )
         }
         
@@ -43,8 +42,7 @@ function PostOverview ({post, navigate}) {
     
 }
 
-function ListPost({data, navigate}) {
-    
+function ListPost({data, navigate}) { //Lists all the posts
     return (
         <Box sx={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%"}}>
                 {data.map(post => 
@@ -56,9 +54,7 @@ function ListPost({data, navigate}) {
 
 
 
-function Loggedin({data, navigate}) {
-
-
+function Loggedin({data, navigate}) { //Logged in version to show create post button
     return (
         <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column", marginTop: "10px"}}>
             <Box >
@@ -67,7 +63,6 @@ function Loggedin({data, navigate}) {
                     <Button sx={{margin: "10px"}}variant="contained" onClick={() => navigate("/post/create")}>Create a post</Button>
                 </Box>
             </Box>
-           
             <Box sx={{width: "100%"}}>
             <h1>Current posts</h1>
             <ListPost data={data} navigate={navigate}/>
@@ -78,7 +73,7 @@ function Loggedin({data, navigate}) {
     )
 }
 
-function Notloggedin ({data, navigate}) {
+function Notloggedin ({data, navigate}) { //not logged in version that doesn't have create post button
     return (
         <Box style={{width: "100%",display: "flex", flexDirection: "column", alignItems:"center", marginTop: "10px"}}>
                 <Typography sx={{fontSize: "32px", fontWeight: "600"}}>Welcome to StackUnderflow!</Typography>
@@ -94,7 +89,7 @@ function Posts() {
     const [data, setData] = useState([])
     const navigate = useNavigate();
 
-    const fetchPosts = async () => {
+    const fetchPosts = async () => { //Get request to get all the posts
         const res = await fetch("/api/list/posts")
         if(res.status === 200) {
             const data1 = await res.json();

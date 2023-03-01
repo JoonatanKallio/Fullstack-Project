@@ -164,3 +164,36 @@ describe('Route test', () => {
     cy.contains("404: Page not found").click()
   })
 })
+
+describe('Test mark as solved', () => {
+  it('Tests to mark post as solved', () => {
+    cy.visit('http://localhost:3000/')
+    cy.contains("Login").click()
+    cy.url().should("include", "/login")
+    cy.get(".login-email").type("test@email.com")
+    cy.get(".login-password").type("Password#3")
+    cy.get(".login-button").click()
+    cy.contains("Logout")
+    cy.contains("Profile")
+    cy.url().should("include", "/")
+    cy.contains("Title | @yes").click()
+    cy.contains("Mark as solved").click()
+    cy.contains("This question has been solved.")
+  })
+})
+
+describe('Visit profile page', () => {
+  it('Visit profile page', () => {
+    cy.visit('http://localhost:3000/')
+    cy.contains("Login").click()
+    cy.url().should("include", "/login")
+    cy.get(".login-email").type("test@email.com")
+    cy.get(".login-password").type("Password#3")
+    cy.get(".login-button").click()
+    cy.contains("Logout")
+    cy.contains("Profile")
+    cy.url().should("include", "/")
+    cy.contains("Profile").click()
+    cy.contains("@yes").click()
+  })
+})

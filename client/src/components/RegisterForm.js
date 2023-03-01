@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Notifications from './Notifications';
 
-function RegisterForm() {
+function RegisterForm() { 
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -11,7 +11,7 @@ function RegisterForm() {
     const [notification, setNotification] = useState()
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //Sends register by POST request
         e.preventDefault();
         const res = await fetch("/api/user/register", {
             method: "POST",
@@ -29,7 +29,7 @@ function RegisterForm() {
             navigate("/login");
         } else if(res.status === 400) {
             const data = await res.json();
-            if(data.status) {
+            if(data.status) { //Shows visually to user what needs to be fixed to register successfully
                 setNotification(data.status)
             } else if(data.errors) {
                 if(data.errors[0].param === "email") {

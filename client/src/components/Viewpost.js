@@ -1,5 +1,5 @@
 
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import * as DOMPurify from 'dompurify';
 import draftToHtml from 'draftjs-to-html';
 import { DateTime } from 'luxon';
@@ -110,39 +110,39 @@ function PostInfo({post, navigate}) {
         navigate("/user/"+post.owner._id)
     }
 
-    if(post.createdAt >= post.updatedAt) {
+    if(post.createdAt >= post.updatedAt) { //Returns different versions depending on if the post has been edited or not
         return (
-            <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+            <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-                <Typography sx={{display: "inline"}}>Posted by:</Typography>
+                <Typography sx={{display: "inline"}}>Posted </Typography>
                 <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
                 <Typography>Posted {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 <Box>
                     <EditBtn post={post} navigate={navigate}></EditBtn>
                     <SolveBtn post={post} navigate={navigate}></SolveBtn>
                 </Box>
-            </Box>
+            </Paper>
         )
     }  else {
-        if(post.solved === true) {
-            return (
-                <Box sx={{backgroundColor: "lightGreen", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+        if(post.solved === true) { //Checks if post is solved or not, since marking post as solve is always edit to the data, it is always edited so no need to check 
+            return (               //this in the created if-clause above this
+                <Paper sx={{backgroundColor: "lightGreen", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                     <Typography sx={{fontSize: "24px", textDecoration: "underline"}}>This question has been solved.</Typography>
                     <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                     <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
-                    <Typography sx={{display: "inline"}}>Posted</Typography>
+                    <Typography sx={{display: "inline"}}>Posted </Typography>
                     <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}>@{post.owner.username}</Typography>
                     <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                     <Box>
                         <EditBtn post={post} navigate={navigate}></EditBtn>
                         
                     </Box>
-                </Box>
+                </Paper>
             )
         } else {
             return (
-                <Box sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+                <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                     <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                     <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
                     <Typography sx={{display: "inline"}}>Posted</Typography>
@@ -152,7 +152,7 @@ function PostInfo({post, navigate}) {
                         <EditBtn post={post} navigate={navigate}></EditBtn>
                         <SolveBtn post={post}></SolveBtn>
                     </Box>
-                </Box>
+                </Paper>
             )
         }
         
@@ -164,21 +164,21 @@ function Comment ({comment}) { //Different returns if the comment has been edite
     const goToProfile = () => {
         navigate("/user/"+comment.author._id)
     }
-    if(comment.createdAt >= comment.updatedAt) {
+    if(comment.createdAt >= comment.updatedAt) { //Returns different versions depending on if the comment has been edited or not
         return (
-            <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black", padding: "10px"}}>
+            <Paper sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black", padding: "10px"}}>
                 <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
                 <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}> @{comment.author.username} </Typography>
                 <Typography>Created {DateTime.fromJSDate(new Date(comment.createdAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-            </Box>
+            </Paper>
         )
     } else {
         return (
-            <Box sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black"}}>
+            <Paper sx={{margin: "10px", backgroundColor: "#dbdbdb", border: "1px solid black", padding: "10px"}}>
                 <Typography sx={{display: "inline", wordWrap: "break-word"}}>{comment.content}</Typography>
                 <Typography sx={{fontWeight: "bold", cursor: "grab", display: "inline"}} onClick={goToProfile}> @{comment.author.username} </Typography>
                 <Typography>Edited {DateTime.fromJSDate(new Date(comment.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
-            </Box>
+            </Paper>
         )
     }
 }
