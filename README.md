@@ -10,4 +10,4 @@ Then run the client `npm run dev:client`
 
 To run the cypress tests, type `npm run test`. 
 
-The cypress tests can only be run once and then you need to delete the user that the test creates to test again.
+The cypress tests can only be run once and then you need to delete the user from the database that the test creates if you want to run the tests again.
