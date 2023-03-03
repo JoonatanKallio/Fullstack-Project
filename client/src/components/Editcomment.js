@@ -2,12 +2,12 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import Notifications from "./Notifications";
+
 function EditComment() {
     const [comment, setComment] = useState()
     const [text, setText] = useState()
     const navigate = useNavigate()
     const routeParam = useParams().commentId
-    
     const [notification, setNotification] = useState()
     
     const fetchComment = async () => { //Fetch one comment by commentId
@@ -57,7 +57,6 @@ function EditComment() {
                     <Button className="save-comment-edit" onClick={handleClick}>Save edit</Button>
                     <Button onClick={handleCancel}>Cancel</Button>
                 </Box>
-                
             </Box>
         )  
     }

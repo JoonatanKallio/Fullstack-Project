@@ -3,7 +3,7 @@ import * as DOMPurify from 'dompurify';
 import draftToHtml from 'draftjs-to-html';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
-import { navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function PostList ({post}) { //Lists all the users posts
     const navigate = useNavigate()
@@ -23,8 +23,6 @@ function PostList ({post}) { //Lists all the users posts
             </Paper>
         )
     }
-    
-    
 }
 
 
@@ -33,8 +31,8 @@ function UserInfo() {
     const [user, setUser] = useState()
     const [posts, setPosts] = useState()
     const navigate = useNavigate()
-
-    const fetchUser = async () => { //Fetches user 
+    
+    const fetchUser = async () => { //Fetches the user 
         const res = await fetch("/api/list/user/"+routeParam)
         if(res.status === 200) {
             const data1 = await res.json();
@@ -43,7 +41,7 @@ function UserInfo() {
         }
     }
 
-    const fetchPosts = async () => {//Fetches the users posts 
+    const fetchPosts = async () => {//Fetches the user's posts 
         const res = await fetch("/api/list/postsbyuser/"+routeParam)
         if(res.status === 200) {
             const data1 = await res.json();
@@ -60,7 +58,7 @@ function UserInfo() {
         fetchPosts()
     }, [user])
 
-    if(user) { //Returns user information and posts and only user if the user has no posts yet
+    if(user) { //Returns user information and posts and returns only the user if the user has no posts yet
         if(posts) {
             return (
                 <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>

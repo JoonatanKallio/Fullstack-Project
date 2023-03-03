@@ -1,9 +1,9 @@
 
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
-import { convertToRaw, EditorState } from 'draft-js';
+import { Box, Button, Paper, Typography } from '@mui/material';
+
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
-import { Editor } from "react-draft-wysiwyg";
+
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom';
 
@@ -52,8 +52,6 @@ function ListPost({data, navigate}) { //Lists all the posts
     )
 }
 
-
-
 function Loggedin({data, navigate}) { //Logged in version to show create post button
     return (
         <Box sx={{width: "100%", display: "flex", alignItems: "center", flexDirection: "column", marginTop: "10px"}}>
@@ -66,10 +64,8 @@ function Loggedin({data, navigate}) { //Logged in version to show create post bu
             <Box sx={{width: "100%"}}>
             <h1>Current posts</h1>
             <ListPost data={data} navigate={navigate}/>
-            </Box>
-            
+            </Box>  
         </Box>
-        
     )
 }
 

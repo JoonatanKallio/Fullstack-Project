@@ -1,7 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-
-import { ContentState, convertFromHTML, convertFromRaw, convertToRaw, EditorState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -15,7 +13,6 @@ function Editpost() {
     const [editorState, setEditorState] = useState(EditorState.createEmpty(null))
     const [notification, setNotification] = useState()
 
-   
     const fetchPost = async () => { //Fetch to get post data by postId
         const res = await fetch("/api/list/post/"+routeParam)
         if(res.status === 200) {
@@ -26,11 +23,9 @@ function Editpost() {
         }
     }
 
-
     useEffect(() => {
         fetchPost();
     }, [])
-
     
     useEffect(() => { //Sets editor state after post has been initialized so post has data to fill the text editor with
         if(post) {
@@ -39,9 +34,7 @@ function Editpost() {
         }   
     }, [post]);
       
-    
-    
-    function onEditorStateChange (editorState) { //Changes editor state
+    function onEditorStateChange (editorState) { //Changes the wysiwyg editor's state
         setEditorState(editorState)
     }
 
@@ -70,7 +63,7 @@ function Editpost() {
         navigate("/post/"+post._id)
     }
 
-    return ( //Returns editor with the post contents inside
+    return ( //Returns editor with the post contents inside ready to edit
         <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginTop: "10px"}}>
             <Typography sx={{fontSize: "32px"}}>Edit your post</Typography>
             <Box sx={{width: {xs: "90%", sm: "60%"}}}>

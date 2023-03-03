@@ -4,7 +4,7 @@ import { convertToRaw, EditorState } from 'draft-js';
 import { useState } from 'react';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Notifications from './Notifications';
 
 function CreatePost() {
@@ -38,14 +38,13 @@ function CreatePost() {
         } else {
             setNotification("Please add a title")
         }
-        
     }
 
     function onEditorStateChange (editorState) { //Wysiwyg editor state changer
         setEditorState(editorState)
     }
 
-    if(localStorage.getItem("token")) { //If user logged in return editor
+    if(localStorage.getItem("token")) { //If user logged in return the post wysiwyg editor
         return (
             <Box  sx={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <Box component="form" sx={{display: "flex", flexDirection: "column", alignItems: "center", width: {xs: "90%", sm: "60%"}, border: "2px solid black", marginTop: "20px"}}>

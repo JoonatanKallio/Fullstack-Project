@@ -6,7 +6,6 @@ function Sitename ({navigate}) { //Returns logo text that can be clicked to go t
     const logoclick = () => {
         navigate("/")
     }
-
     return (
         <Typography sx={{  fontSize:{ xs: "24px", sm: "32px"}, cursor: "grab"}}onClick={logoclick} variant="h5" noWrap component="div">
             Stack Underflow
@@ -42,7 +41,7 @@ function Header() {
         navigate("/user/"+user.id)
     }
 
-    if(user){
+    if(user){ //If user is logged in return logout and profile page header buttons
         return (
             <Grid>
                 <AppBar position="static">
@@ -56,7 +55,7 @@ function Header() {
                 </AppBar>
             </Grid>
         )
-    } else {
+    } else { //If user is not logged in just return login and register buttons in the header
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">

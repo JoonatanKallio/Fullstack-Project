@@ -140,7 +140,7 @@ function PostInfo({post, navigate}) {
                     </Box>
                 </Paper>
             )
-        } else {
+        } else { //Returns this if post is not solved so it has gray background
             return (
                 <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
                     <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
@@ -196,7 +196,7 @@ function Viewpost() {
             const data = await res.json();
             setPost(data)
         } else if(res.status === 404) {   
-            //HANDLE
+            console.log("Error fetching post")
         }
     }
 
@@ -219,7 +219,7 @@ function Viewpost() {
     }
 
     if(post && comments) { //Render posts and comments when they are fetched
-        if(localStorage.getItem("token")) { //if user is logged in
+        if(localStorage.getItem("token")) { //if user is logged in return post and comments with the ability to post comments and edit post if the user owns it
             return ( 
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
                     <Button sx={{marginTop: "10px"}} onClick={handleHomepage} variant="contained">Back to homepage</Button>
@@ -236,7 +236,7 @@ function Viewpost() {
                     </Box>
                 </Box>
             )
-        } else { //if no user is logged in
+        } else { //if no user is logged in just return post and comments
             return (
                 <Box sx={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center"}}>
                     <Button sx={{marginTop: "10px"}} onClick={handleHomepage} variant="contained">Back to homepage</Button>

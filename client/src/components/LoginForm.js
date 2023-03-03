@@ -21,10 +21,9 @@ function LoginForm() {
                 "Content-Type": "application/json"
             }
         })
-        
         if(res.status === 200) {
             const data = await res.json()
-            localStorage.setItem("token", data.token)
+            localStorage.setItem("token", data.token) //Set the token to the local storage if login success
             navigate("/");
         } else {
             const data = await res.json()
