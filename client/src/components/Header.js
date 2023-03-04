@@ -8,7 +8,7 @@ function Sitename ({navigate}) { //Returns logo text that can be clicked to go t
     }
     return (
         <Typography sx={{  fontSize:{ xs: "24px", sm: "32px"}, cursor: "grab"}}onClick={logoclick} variant="h5" noWrap component="div">
-            Stack Underflow
+            StackUnderflow
         </Typography>
     )
 }
