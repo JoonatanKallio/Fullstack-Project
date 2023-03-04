@@ -2,6 +2,8 @@ README.md
 
 Documentation for the project is included in the repository as a pdf.
 
+This project uses node version 16 to switch to it type `nvm use 16` in the cmd on windows.
+
 How to run the project:
 
 First install packages by typing `npm run install` in the root folder and it installs client and server packages.
