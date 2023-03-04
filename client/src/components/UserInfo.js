@@ -9,7 +9,7 @@ function PostList ({post}) { //Lists all the users posts
     const navigate = useNavigate()
     if(post.solved === true) { //Lists solved posts
         return (
-            <Paper sx={{margin: "10px", padding: "5px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightGreen", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, wordBreak: "break-word"}} key={post._id} onClick={() => navigate("/post/"+post._id)}  >
+            <Paper sx={{margin: "10px", padding: "10px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightGreen", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, wordBreak: "break-word"}} key={post._id} onClick={() => navigate("/post/"+post._id)}  >
                 <Typography>Solved.</Typography>  
                 <Typography sx={{textDecoration: "underline"}}>{post.title}</Typography>  
                 <Box  sx={{fontSize: "16px"}} multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box> 
@@ -17,7 +17,7 @@ function PostList ({post}) { //Lists all the users posts
         )
     } else { //Lists non-solved posts
         return (
-            <Paper sx={{margin: "10px", padding: "5px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightgray", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, wordBreak: "break-word"}} key={post._id} onClick={() => navigate("/post/"+post._id)}>
+            <Paper sx={{margin: "10px", padding: "10px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightgray", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, wordBreak: "break-word"}} key={post._id} onClick={() => navigate("/post/"+post._id)}>
                 <Typography sx={{textDecoration: "underline"}}>{post.title}</Typography>  
                 <Box sx={{fontSize: "16px"}} multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box> 
             </Paper>
