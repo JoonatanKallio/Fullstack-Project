@@ -15,7 +15,7 @@ function PostOverview ({post, navigate}) {
 
     if(post.createdAt >= post.updatedAt) { //if post has been created and not edited return this
         return(
-            <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+            <Paper sx={{display: "flex", flexDirection: "column", justifyContent: "center", padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "100px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                 <Typography>{post.title} | @{post.owner.username}</Typography>
                 <Typography>Created {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
             </Paper>
@@ -23,14 +23,14 @@ function PostOverview ({post, navigate}) {
     } else { //if post has been edited after creating return this
         if(post.solved === true) { //If post has been solved return green background
             return(
-                <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightGreen", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Paper sx={{display: "flex", flexDirection: "column", justifyContent: "center", padding: "10px", cursor:'grab', backgroundColor: "lightGreen", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "100px", "&:hover": {transition: "all 0.5s",  backgroundColor: "green"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                     <Typography>{post.title} | @{post.owner.username}</Typography>
                     <Typography>Marked as solved {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 </Paper>
             )
         } else { //If post has not been solved return gray background
             return(
-                <Paper sx={{padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "50px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
+                <Paper sx={{display: "flex", flexDirection: "column", justifyContent: "center", padding: "10px", cursor:'grab', backgroundColor: "lightgray", margin: "5px", width: {xs: "90%", sm: "60%"}, height: "100px", "&:hover": {transition: "all 0.5s",  backgroundColor: "gray"}, border: "solid 1px black"}} onClick={() => handleClick(post._id)} key={post._id}>
                     <Typography>{post.title} | @{post.owner.username}</Typography>
                     <Typography>Edited {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}</Typography>
                 </Paper>
