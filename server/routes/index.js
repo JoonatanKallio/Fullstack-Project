@@ -64,7 +64,7 @@ body("password").isStrongPassword(),
     })
 })
 
-//Tries to find user, if found -> create jwt-token that is returned, if not-> status 403
+//Tries to find user to login, if found and correct password -> create jwt-token that is returned, if not-> status 400
 router.post("/api/user/login", (req, res) => {
     Users.findOne({email: req.body.email}, (err, user) => {
         if(err) throw err;
@@ -210,7 +210,7 @@ router.put("/api/edit/post", passport.authenticate("jwt", { session: false }), (
             const decode = atob(tokenContent[1])
             const json = JSON.parse(decode)
             if(json.id === post.owner.id) { //Before edit check that user is the post owner
-                Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) { //If it does, edit the post
+                Posts.findByIdAndUpdate({_id: req.body.id}, {content: req.body.content}, function(err, post) { //If it is, edit the post
                     if(err) throw err;
                     if(post) {
                         res.json({status: "updated"})
