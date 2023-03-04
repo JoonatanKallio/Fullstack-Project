@@ -112,7 +112,7 @@ function PostInfo({post, navigate}) {
 
     if(post.createdAt >= post.updatedAt) { //Returns different versions depending on if the post has been edited or not
         return (
-            <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+            <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black", padding: "10px"}}>
                 <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                 <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
                 <Typography sx={{display: "inline"}}>Posted </Typography>
@@ -127,7 +127,7 @@ function PostInfo({post, navigate}) {
     }  else {
         if(post.solved === true) { //Checks if post is solved or not, since marking post as solve is always edit to the data, it is always edited so no need to check 
             return (               //this in the created if-clause above this
-                <Paper sx={{backgroundColor: "lightGreen", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+                <Paper sx={{backgroundColor: "lightGreen", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black", padding: "10px"}}>
                     <Typography sx={{fontSize: "24px", textDecoration: "underline"}}>This question has been solved.</Typography>
                     <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                     <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
@@ -142,7 +142,7 @@ function PostInfo({post, navigate}) {
             )
         } else { //Returns this if post is not solved so it has gray background
             return (
-                <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black"}}>
+                <Paper sx={{backgroundColor: "#dbdbdb", width: {xs: "90%", sm: "60%"}, margin: "24px", overflowWrap: 'break-word', border: "1px solid black", padding: "10px"}}>
                     <Typography multiline="true" sx={{fontSize: "24px", textDecoration: "underline"}}>{post.title}</Typography>
                     <Box multiline="true" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draftToHtml(JSON.parse(post.content))) }}></Box>
                     <Typography sx={{display: "inline"}}>Posted</Typography>
