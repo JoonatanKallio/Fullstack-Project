@@ -1,0 +1,15 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "airbnb"
+  ],
+  "rules":{
+    "linebreak-style": ["error", "windows"],
+    "quotes": ["error", "double"],
+    "indent": ["error", 4],
+    "no-underscore-dangle": "off"
+  }
+}

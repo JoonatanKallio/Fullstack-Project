@@ -1,11 +1,12 @@
-let mongoose = require("mongoose")
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
 
-let postSchema = new Schema ({
-    owner: { type: Schema.Types.ObjectId, required: true, ref: "Users"},
+const { Schema } = mongoose;
+
+const postSchema = new Schema({
+    owner: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
     title: { type: String },
     content: { type: String },
-    solved: { type: Boolean, default: false }
-}, {timestamps: true});
+    solved: { type: Boolean, default: false },
+}, { timestamps: true });
 
 module.exports = mongoose.model("Posts", postSchema);
