@@ -185,7 +185,7 @@ function Comment ({comment}) { //Different returns if the comment has been edite
     }
 }
 
-function Viewpost() {
+function ViewPost() {
     const [post, setPost] = useState("")
     const [comments, setComments] = useState("")
     const routeParam = useParams().postId
@@ -258,4 +258,4 @@ function Viewpost() {
         return (<h1>LOADING...</h1>)
     }
 }
-export default Viewpost;
+export default ViewPost;

@@ -60,6 +60,5 @@ function EditComment() {
             </Box>
         )  
     }
-    
 }
 export default EditComment;

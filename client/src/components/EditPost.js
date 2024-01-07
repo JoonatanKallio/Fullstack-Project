@@ -6,7 +6,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate, useParams } from 'react-router-dom';
 import Notifications from './Notifications';
 
-function Editpost() {
+function EditPost() {
     const navigate = useNavigate()
     const routeParam = useParams().postId
     const [post, setPost] = useState()
@@ -90,4 +90,4 @@ function Editpost() {
         </Box>
     )
 }
-export default Editpost;
+export default EditPost;
