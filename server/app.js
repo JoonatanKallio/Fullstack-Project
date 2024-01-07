@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cors = require("cors")
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 const mongoose = require('mongoose');
 
 let passport = require("passport")
@@ -22,8 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 
 //CORS for development
 if(process.env.NODE_ENV === "development") {
@@ -61,4 +59,5 @@ passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
     });
 }));
 
+app.use('/', indexRouter);
 module.exports = app;
