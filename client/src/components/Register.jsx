@@ -4,8 +4,8 @@ function Register() {
     return (
         <div>
             <h1>Register here</h1>
-            <RegisterForm/>
+            <RegisterForm />
         </div>
-    )
+    );
 }
 export default Register;

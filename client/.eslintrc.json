@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "airbnb",
+    "airbnb/hooks"
+  ],
+  "rules":{
+    "linebreak-style": ["error", "windows"],
+    "quotes": ["error", "double"],
+    "indent": ["error", 4],
+    "no-underscore-dangle": "off",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-indent": ["error", 4],
+    "max-len": "off"
+  }
+}
