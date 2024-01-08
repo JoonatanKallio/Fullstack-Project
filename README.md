@@ -1,8 +1,8 @@
 README.md
 
 # Full stack forum
-This project uses Node.js in its backend. The data is stored in a MongoDB database. The application uses React.js in the frontend.
 
+This project uses Node.js in its backend. The data is stored in a MongoDB database. The application uses React.js in the frontend.
 
 How to run the project:
 
