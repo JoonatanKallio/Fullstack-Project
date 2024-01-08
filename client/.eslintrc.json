@@ -17,6 +17,8 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-indent": ["error", 4],
-    "max-len": "off"
+    "max-len": "off",
+    "react/jsx-max-props-per-line": "off",
+    "react/jsx-indent-props": "off"
   }
 }
