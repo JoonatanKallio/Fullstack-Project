@@ -28,6 +28,7 @@ function PostOverview({ post, navigate }) {
                 </Typography>
                 <Typography>
                     Created
+                    {" "}
                     {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
                 </Typography>
             </Paper>
@@ -48,6 +49,7 @@ function PostOverview({ post, navigate }) {
                 </Typography>
                 <Typography>
                     Marked as solved
+                    {" "}
                     {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
                 </Typography>
             </Paper>
@@ -67,6 +69,7 @@ function PostOverview({ post, navigate }) {
             </Typography>
             <Typography>
                 Edited
+                {" "}
                 {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
             </Typography>
         </Paper>

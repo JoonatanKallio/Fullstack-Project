@@ -41,6 +41,7 @@ function CreatePost() {
         }
     };
 
+    // eslint-disable-next-line no-shadow
     function onEditorStateChange(editorState) { // Wysiwyg editor state changer
         setEditorState(editorState);
     }
@@ -64,6 +65,7 @@ function CreatePost() {
                             toolbarClassName="toolbarClassName"
                             wrapperClassName="wrapperClassName"
                             editorClassName="editorClassName"
+                            /* eslint-disable-next-line react/jsx-no-bind */
                             onEditorStateChange={onEditorStateChange}
                             toolbar={{
                                 options: ["blockType", "inline", "fontSize", "list"],

@@ -34,6 +34,7 @@ function EditPost() {
         }
     }, [post]);
 
+    // eslint-disable-next-line no-shadow
     function onEditorStateChange(editorState) { // Changes the wysiwyg editor's state
         setEditorState(editorState);
     }
@@ -71,12 +72,13 @@ function EditPost() {
             <Typography sx={{ fontSize: "32px" }}>Edit your post</Typography>
             <Box sx={{ width: { xs: "90%", sm: "60%" } }}>
                 <Editor
-                  editorState={editorState}
-                  toolbarClassName="toolbarClassName"
-                  wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
-                  onEditorStateChange={onEditorStateChange}
-                  toolbar={{
+                    editorState={editorState}
+                    toolbarClassName="toolbarClassName"
+                    wrapperClassName="wrapperClassName"
+                    editorClassName="editorClassName"
+                    /* eslint-disable-next-line react/jsx-no-bind */
+                    onEditorStateChange={onEditorStateChange}
+                    toolbar={{
                         options: ["blockType", "inline", "fontSize", "list"],
                         inline: { inDropdown: true },
                         fontsize: { inDropdown: true },

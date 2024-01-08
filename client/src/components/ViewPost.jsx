@@ -126,6 +126,7 @@ function PostInfo({ post, navigate }) {
                 </Typography>
                 <Typography>
                     Posted
+                    {" "}
                     {DateTime.fromJSDate(new Date(post.createdAt)).toLocaleString(DateTime.DATETIME_MED)}
                 </Typography>
                 <Box>
@@ -151,6 +152,7 @@ function PostInfo({ post, navigate }) {
                 </Typography>
                 <Typography>
                     Edited
+                    {" "}
                     {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
                 </Typography>
                 <Box>
@@ -174,6 +176,7 @@ function PostInfo({ post, navigate }) {
             </Typography>
             <Typography>
                 Edited
+                {" "}
                 {DateTime.fromJSDate(new Date(post.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
             </Typography>
             <Box>
@@ -205,6 +208,7 @@ function Comment({ comment }) { // Different returns if the comment has been edi
                 </Typography>
                 <Typography>
                     Created
+                    {" "}
                     {DateTime.fromJSDate(new Date(comment.createdAt)).toLocaleString(DateTime.DATETIME_MED)}
                 </Typography>
             </Paper>
@@ -225,6 +229,7 @@ function Comment({ comment }) { // Different returns if the comment has been edi
             </Typography>
             <Typography>
                 Edited
+                {" "}
                 {DateTime.fromJSDate(new Date(comment.updatedAt)).toLocaleString(DateTime.DATETIME_MED)}
             </Typography>
         </Paper>

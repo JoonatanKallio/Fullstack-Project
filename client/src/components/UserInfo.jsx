@@ -12,7 +12,7 @@ function PostList({ post }) { // Lists all the users posts
     if (post.solved === true) { // Lists solved posts
         return (
             <Paper
-              sx={{
+                sx={{
                     margin: "10px", padding: "10px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightGreen", "&:hover": { transition: "all 0.5s", backgroundColor: "green" }, wordBreak: "break-word",
                 }} key={post._id} onClick={() => navigate(`/post/${post._id}`)}
             >
@@ -24,7 +24,7 @@ function PostList({ post }) { // Lists all the users posts
     } // Lists non-solved posts
     return (
         <Paper
-          sx={{
+            sx={{
                 margin: "10px", padding: "10px", fontSize: "12px", width: "100%", border: "1px solid black", background: "lightgray", "&:hover": { transition: "all 0.5s", backgroundColor: "gray" }, wordBreak: "break-word",
             }} key={post._id} onClick={() => navigate(`/post/${post._id}`)}
         >
