@@ -2,16 +2,23 @@ README.md
 
 # Full stack forum
 
-This project uses Node.js in its backend. The data is stored in a MongoDB database. The application uses React.js in the frontend.
 
-How to run the project:
+# Technologies used
 
-First install packages by typing `npm run install` in the root folder and it installs client and server packages.
+This project uses Node.js in its backend. The data is stored in a MongoDB database and it is accessed from the backend with Mongoose. The application uses React in the frontend. React-router is used to route the user and MUI library is used to style the application. There are also Cypress tests that can be run to test the application.
+
+# How to run the project:
+
+**You have to have MongoDB installed on your computer**
+
+</br>
+
+Install packages by typing `npm run install` in the root folder to install the client and server packages.
 
 Then go to the server folder and run `npm run dev`
 
-Then open the server folder and run  `npm run start`
+Then open the client folder and run  `npm run start`
 
-To run the cypress tests, type `npm run test` in the parent folder.
+To run the cypress tests, type `npm run test` in the project folder.
 
-The cypress tests can only be run once and then you need to delete post, comment and the user from the database.
+**The tests can only be run once successfully, then you need to delete the test posts, comments and users from the database to test again.**
